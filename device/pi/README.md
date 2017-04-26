@@ -83,6 +83,9 @@ docker run -it --rm \
 2017-04-26T12:54:37+0000 BuzzerComponent ready!
 ```
 
+pi@raspberrypi:~/iotcookbook/device/pi/recipes/buzzer $ grep Serial /proc/cpuinfo
+Serial      : 0000000041f4b2fb
+
 That's it. You've successfully deployed and run an Autobahn based application component that exposes hardware on the Pi as a WAMP component. The wrapped hardware can now interact with any other WAMP component in your overall application or system.
 
 

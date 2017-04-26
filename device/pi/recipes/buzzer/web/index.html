@@ -38,9 +38,9 @@
 
         <h2>Status</h2>
         <ul>
-            <li>Connected to <b id="status_url">-</b></li>
-            <li>Joined realm <b id="status_realm">-</b></li>
-            <li>Addressing Pi with serial No. <b id="status_serial">-</b></li>
+            <li>Connected to URL (protocol): <b id="status_url">-</b></li>
+            <li>Joined as authid@realm: <b id="status_realm">-</b></li>
+            <li>Addressing Pi with serial No.: <b id="status_serial">-</b></li>
         </ul>
 
         <h2>Buzzer Trigger</h2>
@@ -112,7 +112,7 @@
                 session = new_session;
 
                 status_realm.innerHTML = '' + details.authid + '@' + details.realm;
-                status_url.innerHTML = '' + details.transport.url + ' [' + details.transport.protocol + ']';
+                status_url.innerHTML = '' + details.transport.url + ' (' + details.transport.protocol + ')';
 
                 function on_beep_started (args, kwargs) {
                     console.log('beeping started:', kwargs);

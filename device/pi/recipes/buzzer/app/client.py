@@ -12,10 +12,9 @@ from twisted.internet import reactor
 from twisted.internet.defer import inlineCallbacks
 from twisted.internet.error import ReactorNotRunning
 
-from autobahn.twisted.wamp import ApplicationSession
-from autobahn.twisted.wamp import ApplicationRunner
-from autobahn.wamp.exception import ApplicationError
 from autobahn.twisted.util import sleep
+from autobahn.twisted.wamp import ApplicationSession, ApplicationRunner
+from autobahn.wamp.exception import ApplicationError
 
 
 def get_serial():
@@ -37,6 +36,9 @@ class BuzzerComponent(ApplicationSession):
 
     @inlineCallbacks
     def onJoin(self, details):
+        """
+        Callback when the WAMP session has been established and is ready for use.
+        """
 
         # get the Pi serial number
         self._serial = get_serial()
@@ -48,7 +50,7 @@ class BuzzerComponent(ApplicationSession):
         self.log.info("Crossbar.io IoT Starterkit Serial No.: {serial}", serial=self._serial)
         self.log.info("BuzzerComponent connected: {details}", details=details)
 
-        # get custom configuration
+        # get component user extra configuration
         cfg = self.config.extra
 
         # initialize buzzer
@@ -63,8 +65,9 @@ class BuzzerComponent(ApplicationSession):
 
         # register procedures
         for proc in [
-            (self.beep, 'beep'),
-            (self.welcome, 'welcome'),
+            (self.is_beeping, u'is_beeping'),
+            (self.beep, u'beep'),
+            (self.welcome, u'welcome'),
         ]:
             uri = u'{}.{}'.format(self._prefix, proc[1])
             yield self.register(proc[0], uri)
@@ -74,6 +77,16 @@ class BuzzerComponent(ApplicationSession):
 
         # play annoying welcome beeps to give acoustic feedback for being ready
         self.welcome()
+
+    def is_beeping(self):
+        """
+        Check if the buzzer is currently playing a beeping sequence, and hence a (further)
+        concurrent call to beep() will fail.
+
+        :returns: Flag indicating whether the buzzer is currently beeping.
+        :rtype: bool
+        """
+        return self._is_beeping
 
     @inlineCallbacks
     def beep(self, count=None, on=None, off=None):
@@ -162,12 +175,12 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    # custom configuration data
     if args.debug:
         txaio.start_logging(level='debug')
     else:
         txaio.start_logging(level='info')
 
+    # custom configuration data
     extra = {
         # GPI pin of buzzer
         u'buzzer_pin': 16,
