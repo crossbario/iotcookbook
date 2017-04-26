@@ -9,7 +9,7 @@ Run the buzzer component on the Pi following [this](https://github.com/crossbari
 
 Then open
 
-    https://demo.crossbar.io/iotcookbook/device/pi/recipes/buzzer?serial=41f4b2fb
+* [https://demo.crossbar.io/iotcookbook/device/pi/recipes/buzzer?serial=41f4b2fb](https://demo.crossbar.io/iotcookbook/device/pi/recipes/buzzer?serial=41f4b2fb)
 
 in your browser - anywhere.
 

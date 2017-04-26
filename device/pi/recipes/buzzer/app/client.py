@@ -12,6 +12,7 @@ from twisted.internet import reactor
 from twisted.internet.defer import inlineCallbacks
 from twisted.internet.error import ReactorNotRunning
 
+from autobahn.util import utcnow
 from autobahn.twisted.util import sleep
 from autobahn.twisted.wamp import ApplicationSession, ApplicationRunner
 from autobahn.wamp.exception import ApplicationError
@@ -60,11 +61,15 @@ class BuzzerComponent(ApplicationSession):
         GPIO.setup(self._buzzer_pin, GPIO.OUT)
         GPIO.output(self._buzzer_pin, 0)
 
+        # remember startup timestamp
+        self._started = utcnow()
+
         # flag indicating if the beeper is already operating
         self._is_beeping = False
 
         # register procedures
         for proc in [
+            (self.started, u'started'),
             (self.is_beeping, u'is_beeping'),
             (self.beep, u'beep'),
             (self.welcome, u'welcome'),
@@ -73,10 +78,20 @@ class BuzzerComponent(ApplicationSession):
             yield self.register(proc[0], uri)
             self.log.info('registered procedure {uri}', uri=uri)
 
+        self._is_ready = True
         self.log.info("BuzzerComponent ready!")
 
         # play annoying welcome beeps to give acoustic feedback for being ready
         self.welcome()
+
+    def started(self):
+        """
+        Get UTC timestamp when the component started.
+
+        :returns: ISO8601 formatted UTC timestamp when the component started.
+        :rtype: str
+        """
+        return self._started
 
     def is_beeping(self):
         """

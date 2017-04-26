@@ -37,11 +37,20 @@
         </p>
 
         <h2>Status</h2>
-        <ul>
-            <li>Connected to URL (protocol): <b id="status_url">-</b></li>
-            <li>Joined as authid@realm: <b id="status_realm">-</b></li>
-            <li>Addressing Pi with serial No.: <b id="status_serial">-</b></li>
-        </ul>
+        <table>
+            <tr>
+                <td>Connected to URL (protocol)</td><td><b id="status_url">-</b></td>
+            </tr>
+            <tr>
+                <td>Joined as authid@realm</td><td><b id="status_realm">-</b></td>
+            </tr>
+            <tr>
+                <td>Addressing Pi with serial No.:</td><td><b id="status_serial">-</b></td>
+            </tr>
+            <tr>
+                <td>Pi component started (UTC)</td><td><b id="status_started">-</b></td>
+            </tr>
+        </table>
 
         <h2>Buzzer Trigger</h2>
         <p>
@@ -63,100 +72,6 @@
 
         <script>AUTOBAHN_DEBUG = false;</script>
         <script src="https://demo.crossbar.io/shared/autobahn/autobahn.min.js"></script>
-
-        <script>
-            console.log("Running on AutobahnJS ", autobahn.version);
-
-            // UI elements
-            var buzzer = document.getElementById('buzzer');
-            var status_url = document.getElementById('status_url');
-            var status_realm = document.getElementById('status_realm');
-            var status_serial = document.getElementById('status_serial');
-
-            // get serial from document URL
-            // .../iotcookbook/device/pi/recipes/buzzer/web/index.html?serial=41f4b2fb
-            var params = new URLSearchParams(document.location.search);
-            var serial = params.get('serial');
-            if (!serial) {
-                throw 'no serial provided!';
-            }
-            status_serial.innerHTML = serial;
-
-            // the URI prefix the buzzer component on the Pi is using
-            var prefix = 'io.crossbar.demo.iotstarterkit.' + serial + '.buzzer.';
-
-            // the WAMP session
-            var session;
-
-            // the URL of the WAMP Router (Crossbar.io)
-            var wsuri;
-            if (document.location.origin == "file://") {
-                wsuri = "wss://demo.crossbar.io/ws";
-            } else {
-                wsuri = (document.location.protocol === "http:" ? "ws:" : "wss:") + "//" + document.location.host + "/ws";
-            }
-
-            // the WAMP realm we join
-            var realm = "crossbardemo";
-
-            // the WAMP connection to the Router
-            var connection = new autobahn.Connection({
-                url: wsuri,
-                realm: realm
-            });
-
-
-            // fired when connection is established and session attached
-            connection.onopen = function (new_session, details) {
-                console.log("Connected: ", details);
-                session = new_session;
-
-                status_realm.innerHTML = '' + details.authid + '@' + details.realm;
-                status_url.innerHTML = '' + details.transport.url + ' (' + details.transport.protocol + ')';
-
-                function on_beep_started (args, kwargs) {
-                    console.log('beeping started:', kwargs);
-                    buzzer.style.backgroundColor = '#ff0';
-                }
-
-                function on_beep_ended () {
-                    console.log('beeping ended');
-                    buzzer.style.backgroundColor = '#999';
-                }
-
-                session.subscribe(prefix + 'on_beep_started', on_beep_started);
-                session.subscribe(prefix + 'on_beep_ended', on_beep_ended);
-            };
-
-
-            // fired when connection was lost (or could not be established)
-            connection.onclose = function (reason, details) {
-                console.log("Connection lost: " + reason);
-                session = null;
-                status_realm.innerHTML = '-';
-                status_url.innerHTML = '-';
-            }
-
-
-            // now actually open the connection
-            connection.open();
-
-
-            // this will be used from UI elements
-            function beep(count, on, off) {
-                if (session) {
-                    session.call(prefix + 'beep', [count, on, off]).then(
-                        function () {
-                            console.log('beeped!');
-                        },
-                        function (err) {
-                            console.log('beeping failed:', err);
-                        }
-                    );
-                } else {
-                    console.log('cannot beep: not connected');
-                }
-            }
-        </script>
+        <script src="client.js"></script>
    </body>
 </html>
