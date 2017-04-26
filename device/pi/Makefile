@@ -1,4 +1,8 @@
-# export PI=pi@192.168.1.31
-# export IOTCOOKBOOK=${HOME}/scm/crossbario/iotcookbook
+PI=pi@raspberrypi.local
+IOTCOOKBOOK=${HOME}/scm/crossbario/iotcookbook
+
+login:
+	ssh ${PI}
+
 mount:
 	dpipe /usr/lib/openssh/sftp-server = ssh ${PI} sshfs :${IOTCOOKBOOK} /home/pi/iotcookbook -o slave &

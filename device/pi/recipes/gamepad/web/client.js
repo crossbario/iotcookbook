@@ -1,14 +1,19 @@
 console.log("Running on AutobahnJS ", autobahn.version);
 
 // UI elements
-var buzzer = document.getElementById('buzzer');
+var pad1 = document.getElementById('pad1');
+var pad2 = document.getElementById('pad2');
+
+var zini1 = document.getElementById('zini1');
+var zini2 = document.getElementById('zini2');
+
 var status_url = document.getElementById('status_url');
 var status_realm = document.getElementById('status_realm');
 var status_serial = document.getElementById('status_serial');
 var status_started = document.getElementById('status_started');
 
 // get serial from document URL
-// .../iotcookbook/device/pi/recipes/buzzer/web/index.html?serial=41f4b2fb
+// .../iotcookbook/device/pi/recipes/gamepad/web/index.html?serial=41f4b2fb
 var params = new URLSearchParams(document.location.search);
 var serial = params.get('serial');
 if (!serial) {
@@ -16,8 +21,8 @@ if (!serial) {
     window.location.replace(window.location.pathname + '?serial=' + new_serial);
 }
 
-// the URI prefix the buzzer component on the Pi is using
-var prefix = 'io.crossbar.demo.iotstarterkit.' + serial + '.buzzer.';
+// the URI prefix the gamepad component on the Pi is using
+var prefix = 'io.crossbar.demo.iotstarterkit.' + serial + '.gamepad.';
 
 // the WAMP session
 var session;
@@ -62,18 +67,63 @@ connection.onopen = function (new_session, details) {
         }
     );
 
-    function on_beep_started (args, kwargs) {
-        console.log('beeping started:', kwargs);
-        buzzer.style.backgroundColor = '#ff0';
+    function on_data (args) {
+        var data = args[0];
+
+        console.log('gamepad data received:', data);
+
+        if (data.LB === 1) {
+            pad1.style.backgroundColor = '#ff0';
+        } else {
+            pad1.style.backgroundColor = '#999';
+        }
+
+        if (data.RB === 1) {
+            pad2.style.backgroundColor = '#ff0';
+        } else {
+            pad2.style.backgroundColor = '#999';
+        }
+
+        if (data.X1 || data.Y1) {
+            var w = window.innerWidth;
+            var h = window.innerHeight;
+            var r;
+            if (h < w) {
+                r = h;
+            } else {
+                r = w;
+            }
+            if (data.X1) {
+                var x = Math.round(w/2 + r * (data.X1 / 60000));
+                zini1.style.left = '' + x + 'px';
+            }
+            if (data.Y1) {
+                var y = Math.round(h/2 - r * (data.Y1 / 60000));
+                zini1.style.top = '' + y + 'px';
+            }
+        }
+
+        if (data.X2 || data.Y2) {
+            var w = window.innerWidth;
+            var h = window.innerHeight;
+            var r;
+            if (h < w) {
+                r = h;
+            } else {
+                r = w;
+            }
+            if (data.X2) {
+                var x = Math.round(w/2 + r * (data.X2 / 60000));
+                zini2.style.left = '' + x + 'px';
+            }
+            if (data.Y2) {
+                var y = Math.round(h/2 - r * (data.Y2 / 60000));
+                zini2.style.top = '' + y + 'px';
+            }
+        }
     }
 
-    function on_beep_ended () {
-        console.log('beeping ended');
-        buzzer.style.backgroundColor = '#999';
-    }
-
-    session.subscribe(prefix + 'on_beep_started', on_beep_started);
-    session.subscribe(prefix + 'on_beep_ended', on_beep_ended);
+    session.subscribe(prefix + 'on_data', on_data);
 };
 
 
@@ -88,20 +138,3 @@ connection.onclose = function (reason, details) {
 
 // now actually open the connection
 connection.open();
-
-
-// this will be used from UI elements
-function beep(count, on, off) {
-    if (session) {
-        session.call(prefix + 'beep', [count, on, off]).then(
-            function () {
-                console.log('beeped!');
-            },
-            function (err) {
-                console.log('beeping failed:', err);
-            }
-        );
-    } else {
-        console.log('cannot beep: not connected');
-    }
-}

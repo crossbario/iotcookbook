@@ -2,7 +2,7 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
-    <title>Crossbar.io IoT Cookbook - Pi/Buzzer</title>
+    <title>Crossbar.io IoT Cookbook - Pi/Gamepad</title>
 
     <head>
         <style>
@@ -23,20 +23,40 @@
                 line-height: 1.6em;
             }
 
-            #buzzer {
-                width: 200px;
-                height: 100px;
+            .pad {
+                display: inline-block;
+                width: 80px;
+                height: 80px;
                 background-color: #999;
+                margin:10px;
+            }
+
+            .zini {
+                position: fixed;
+                width: 20px;
+                height: 20px;
+                padding: 0;
+                margin: 0;
+                background-color: #ff0;
+                border: 2px solid #333;
+                border-radius: 15px;
+                text-align: center;
+                vertical-align: middle;
+                font-size: 12px;
+                font-weight: bold;
             }
         </style>
     </head>
     <body>
-        <h1>Crossbar.io IoT Cookbook: Pi/Buzzer Frontend</h1>
+        <div id="zini1" class="zini">1</div>
+        <div id="zini2" class="zini">2</div>
+
+        <h1>Crossbar.io IoT Cookbook: Pi/Gamepad Frontend</h1>
 
         <p>
             This is the demo frontend for the
-            <a href="https://github.com/crossbario/iotcookbook/tree/master/device/pi/recipes/buzzer">
-            Buzzer Recipe</a> in the Crossbar.io IoT Cookbook.
+            <a href="https://github.com/crossbario/iotcookbook/tree/master/device/pi/recipes/gamepad">
+            Gamepad Recipe</a> in the Crossbar.io IoT Cookbook.
         </p>
 
         <h2>Status</h2>
@@ -55,22 +75,13 @@
             </tr>
         </table>
 
-        <h2>Buzzer Trigger</h2>
+        <h2>Pad Indicator</h2>
         <p>
-            Click one of the buttons to start a beeping sequence on the piezo buzzer connected to the Pi.
+            When button XX is hit on the gamepad, this indicator is flashed.
         </p>
         <p>
-            <button onclick="beep();">Beep 1x</button>
-            <button onclick="beep(5);">Beep 5x</button>
-            <button onclick="beep(3, 400, 100);">Beep 3x long</button>
-        </p>
-
-        <h2>Buzzer Indicator</h2>
-        <p>
-            When the buzzer on the Pi is active (playing a beep sequence), this indicator is flashed.
-        </p>
-        <p>
-            <div id="buzzer"></div>
+            <div id="pad1" class="pad">LB</div>
+            <div id="pad2" class="pad">RB</div>
         </p>
 
         <script>AUTOBAHN_DEBUG = false;</script>

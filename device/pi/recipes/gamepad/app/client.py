@@ -71,18 +71,6 @@ class XboxdrvReceiver(LineReceiver):
                 self._last = data
 
 
-def get_serial():
-    """
-    Get the Pi's serial number.
-    """
-    with open('/proc/cpuinfo') as fd:
-        for line in fd.read().splitlines():
-            line = line.strip()
-            if line.startswith('Serial'):
-                _, serial = line.split(':')
-                return serial.strip().lstrip('0')
-
-
 class XboxControllerAdapter(ApplicationSession):
     """
     Our component wrapping the buzzer hardware.
@@ -100,6 +88,11 @@ class XboxControllerAdapter(ApplicationSession):
         # get the device ID
         self._serial = cfg[u'id']
 
+        # get handle to the xbox reader object and set
+        # outself as the handling session thereon
+        self._xbox = cfg[u'xbox']
+        self._xbox._session = self
+
         # all procedures/events will have this URI prefix
         self._prefix = u'io.crossbar.demo.iotstarterkit.{}.gamepad'.format(self._serial)
 
@@ -110,6 +103,7 @@ class XboxControllerAdapter(ApplicationSession):
         # register procedures
         for proc in [
             (self.started, u'started'),
+            (self.started, u'get_data'),
         ]:
             uri = u'{}.{}'.format(self._prefix, proc[1])
             yield self.register(proc[0], uri)
@@ -129,8 +123,24 @@ class XboxControllerAdapter(ApplicationSession):
         """
         return self._started
 
+    def get_data(self):
+        """
+        Get current controller state.
+        """
+        if self._xbox:
+            return self._xbox._last
+        else:
+            return None
+
+    def on_data(self, data):
+        """
+        Hook that fires when xbox controller has emitted some data.
+        """
+        self.publish(u'{}.on_data'.format(self._prefix), data)
+
     def onLeave(self, details):
         self.log.info("session closed: {details}", details=details)
+        self._xbox = None
         self.disconnect()
 
     def onDisconnect(self):
@@ -139,6 +149,18 @@ class XboxControllerAdapter(ApplicationSession):
             reactor.stop()
         except ReactorNotRunning:
             pass
+
+
+def get_serial():
+    """
+    Get the Pi's serial number.
+    """
+    with open('/proc/cpuinfo') as fd:
+        for line in fd.read().splitlines():
+            line = line.strip()
+            if line.startswith('Serial'):
+                _, serial = line.split(':')
+                return serial.strip().lstrip('0')
 
 
 if __name__ == '__main__':
@@ -160,6 +182,9 @@ if __name__ == '__main__':
         txaio.start_logging(level='debug')
     else:
         txaio.start_logging(level='info')
+
+    if args.id is None:
+        args.id = get_serial()
 
     # used to receive and parse data from Xboxdrv
     xbox = XboxdrvReceiver()
