@@ -2,16 +2,81 @@
 
 This part of the IoT Cookbook provides information, howtos and recipes for the Raspberry Pi and the Crossbar.io IoT Starterkit.
 
-Running the recipes here is only three commands, eg here is how to start the [Buzzer Recipe](recipes/buzzer):
+
+## How to run
+
+Running the recipes here is only few commands away, eg the following describes how to start the [Buzzer Recipe](recipes/buzzer). This assumes you have a Linux with Docker running on the Pi, eg Raspbian with Docker.
+
+Clone the [crossbario/iotcookbook](https://github.com/crossbario/iotcookbook) repository on your Pi:
 
 ```console
 ssh pi@raspberrypi.local
 git clone https://github.com/crossbario/iotcookbook.git
+```
+
+> You should replace `pi@raspberrypi.local` here and in all command down below with the `user@hostname` of your Pi.
+
+Alternatively, you can clone the repo on your notebook:
+
+```console
+cd ~
+git clone https://github.com/crossbario/iotcookbook.git
+```
+
+and then mount this local working copy *on* your Pi *from* your notebook:
+
+```console
+dpipe /usr/lib/openssh/sftp-server = ssh pi@raspberrypi.local sshfs :${HOME}/iotcookbook /home/pi/iotcookbook -o slave &
+```
+
+The advantage using this method is an easier development workflow, since you can edit files on your notebook, and only use the remote shell session on your Pi to restart your changed code and such.
+
+> Above command makes use of a technique called "reverse SSHFS", eg see [here](https://blog.dhampir.no/content/reverse-sshfs-mounts-fs-push)
+
+Regardless of which approach you've followed, remotely log into your Pi and start the component:
+
+```
 cd iotcookbook/device/pi/recipes/buzzer
 make start
 ```
 
-> This assumes you have a Linux with Docker running on the Pi, eg Raspbian with Docker.
+You should see the component starting in a container and hear a welcome beeping sequence:
+
+```console
+pi@raspberrypi:~/iotcookbook/device/pi/recipes/buzzer $ make start
+docker build -t cookbook-buzzer -f Dockerfile .
+Sending build context to Docker daemon  9.216kB
+Step 1/5 : FROM crossbario/autobahn-python-armhf
+ ---> 1dce1970750c
+Step 2/5 : RUN pip install pyopenssl service_identity RPi.GPIO
+ ---> Using cache
+ ---> 5e623d43ce99
+Step 3/5 : RUN rm -rf /app/*
+ ---> Using cache
+ ---> 2d6c3d1f0831
+Step 4/5 : COPY ./app /app
+ ---> Using cache
+ ---> 865b2e34bd9e
+Step 5/5 : CMD python -u client.py
+ ---> Using cache
+ ---> 8a7f5d00b861
+Successfully built 8a7f5d00b861
+docker run -it --rm \
+    --device /dev/ttyAMA0 \
+    --device /dev/mem \
+    --device /dev/gpiomem \
+    --privileged \
+    --net=host \
+    -e CBURL='wss://demo.crossbar.io/ws' \
+    -e CBREALM='crossbardemo' \
+    cookbook-buzzer
+2017-04-26T12:54:37+0000 Crossbar.io IoT Starterkit Serial No.: 1106555643
+2017-04-26T12:54:37+0000 BuzzerComponent connected: SessionDetails(realm=<crossbardemo>, session=1410140973480360, authid=<A6J9-7TEY-4U7E-SUPQ-EQRK-KH6E>, authrole=<anonymous>, authmethod=anonymous, authprovider=static, authextra=None, resumed=None, resumable=None, resume_token=None)
+2017-04-26T12:54:37+0000 BuzzerComponent ready!
+```
+
+
+## How it works
 
 The `make start` command will first build a Docker image named `cookbook-buzzer`:
 
@@ -64,3 +129,5 @@ The Crossbar.io router URL and realm the component should connect to are provide
 Further, a couple of extra permissions are given to the started container to allow our code access the hardware connected to the host the container is running on, namely the Pi.
 
 Finally, we allow arbitrary networking (this is to simplify things here, for production you want to restrict that).
+
+
