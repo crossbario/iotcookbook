@@ -25,7 +25,12 @@ cd ~
 git clone https://github.com/crossbario/iotcookbook.git
 ```
 
-and then mount this local working copy *on* your Pi *from* your notebook:
+then create a mountpoint on the Pi
+```console
+ssh pi@raspberrypi.local mkdir -p iotcookbook
+```
+
+and then mount your local working copy *on* your Pi *from* your notebook:
 
 ```console
 dpipe /usr/lib/openssh/sftp-server = ssh pi@raspberrypi.local \
@@ -89,7 +94,7 @@ The `make start` command will first build a Docker image named `cookbook-buzzer`
 docker build -t cookbook-buzzer -f Dockerfile .
 ```
 
-The `Dockerfile` derives a component specific Docker image from one of the [base Docker images](https://github.com/crossbario/crossbar-docker/blob/master/IMAGES.md) we provide for Autobahn based components:
+The [Dockerfile](recipes/buzzer/Dockerfile) derives a component specific Docker image from one of the [base Docker images](https://github.com/crossbario/crossbar-docker/blob/master/IMAGES.md) we provide for Autobahn based components:
 
 
 ```
@@ -110,7 +115,7 @@ The Docker image derives of `crossbario/autobahn-python-armhf`, which is the def
 
 Next, component specific software dependencies are installed, such as the Python `RPi.GPIO` package.
 
-Finally, the example `/app/*` contents that comes with our base images is replaced with our buzzer application code, everything from the `app` folder on the build host, and the image is configured to start `client.py` by default using Python.
+Finally, the example `/app/*` contents that comes with the base images is replaced with our buzzer application code, everything from the `app` folder on the build host, and the image is configured to start `client.py` by default using Python.
 
 After the image is built, a new container from the built Docker image named `cookbook-buzzer` is started:
 
