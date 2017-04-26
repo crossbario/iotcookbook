@@ -27,7 +27,6 @@ The Crossbar.io IoT Starterkit has a built in piezo buzzer connected to GPIO 16 
 
 The component is written in Python using Autobahn running on Twisted. The [Dockerfile](Dockerfile) for the component uses the default `crossbario/autobahn-python-armhf` image as base.
 
-
 ## API
 
 The component uses an URI prefix containing the Pi serial number

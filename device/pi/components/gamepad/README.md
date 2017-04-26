@@ -19,6 +19,8 @@ and reboot the Pi.
 
 Run the gamepad component on the Pi following [this](https://github.com/crossbario/iotcookbook/tree/master/device/pi#how-to-run) general procedure.
 
+[![asciicast](https://asciinema.org/a/edyrral22af5z86ey77i8k3lh.png)](https://asciinema.org/a/edyrral22af5z86ey77i8k3lh)
+
 Then open
 
 * [https://demo.crossbar.io/iotcookbook/device/pi/recipes/gamepad?serial=41f4b2fb](https://demo.crossbar.io/iotcookbook/device/pi/recipes/gamepad?serial=41f4b2fb)

@@ -1,11 +1,11 @@
 # Raspberry Pi and Crossbar.io IoT Starterkit Cookbook
 
-This part of the IoT Cookbook provides information, howtos and [recipes](recipes) for the Raspberry Pi and the Crossbar.io IoT Starterkit.
+This part of the IoT Cookbook provides information, howtos and [components](components) for the Raspberry Pi and the Crossbar.io IoT Starterkit.
 
 
 ## How to run
 
-Running the recipes here is only few commands away, eg the following describes how to run the [Buzzer Recipe](recipes/buzzer).
+Running the components here is only few commands away, eg the following describes how to run the [Buzzer Recipe](components/buzzer).
 
 This assumes you have a Linux with Docker running on the Pi, eg Raspbian with Docker.
 
@@ -44,16 +44,22 @@ The advantage using the latter method is an easier development workflow, since y
 Regardless of which approach you've followed, now remotely log into your Pi and start the component:
 
 ```
-cd iotcookbook/device/pi/recipes/buzzer
+cd iotcookbook/device/pi/components/buzzer
 make start
 ```
 
-[![asciicast](https://asciinema.org/a/edyrral22af5z86ey77i8k3lh.png)](https://asciinema.org/a/edyrral22af5z86ey77i8k3lh)
+When you start the component the first time, the respective Docker image needs to be built, which takes some time:
+
+[![asciicast](https://asciinema.org/a/cu3bwe1iop99efxjpxhui8v42.png)](https://asciinema.org/a/cu3bwe1iop99efxjpxhui8v42)
+
+When you start the component after that, the image will already be built, and startup is fast:
+
+[![asciicast](https://asciinema.org/a/bhvvnuwo609gbn5b0l567pn78.png)](https://asciinema.org/a/bhvvnuwo609gbn5b0l567pn78)
 
 You should see the component starting in a container and hear a welcome beeping sequence:
 
 ```console
-pi@raspberrypi:~/iotcookbook/device/pi/recipes/buzzer $ make start
+pi@raspberrypi:~/iotcookbook/device/pi/components/buzzer $ make start
 docker build -t cookbook-buzzer -f Dockerfile .
 Sending build context to Docker daemon  9.216kB
 Step 1/5 : FROM crossbario/autobahn-python-armhf
@@ -105,7 +111,7 @@ The `make start` command will first build a Docker image named `cookbook-buzzer`
 docker build -t cookbook-buzzer -f Dockerfile .
 ```
 
-The [Dockerfile](recipes/buzzer/Dockerfile) derives a component specific Docker image from one of the [base Docker images](https://github.com/crossbario/crossbar-docker/blob/master/IMAGES.md) we provide for Autobahn based components:
+The [Dockerfile](components/buzzer/Dockerfile) derives a component specific Docker image from one of the [base Docker images](https://github.com/crossbario/crossbar-docker/blob/master/IMAGES.md) we provide for Autobahn based components:
 
 
 ```
