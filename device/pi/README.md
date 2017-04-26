@@ -48,6 +48,8 @@ cd iotcookbook/device/pi/recipes/buzzer
 make start
 ```
 
+![asciicast](https://asciinema.org/a/14.png)](https://asciinema.org/a/14)
+
 You should see the component starting in a container and hear a welcome beeping sequence:
 
 ```console
