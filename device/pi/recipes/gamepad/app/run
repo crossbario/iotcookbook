@@ -1,0 +1,3 @@
+#!/bin/bash
+
+/usr/bin/xboxdrv --quiet --detach-kernel-driver | /usr/local/bin/python /app/client.py

@@ -3,6 +3,19 @@
 This component exposes the piezo buzzer built into the Crossbar.io IoT Starterkit in a WAMP component. The piezo buzzer is wrapped as a WAMP component and can then be used as a acoustic warning or notification device within a WAMP based application.
 
 
+https://discourse.osmc.tv/t/april-update-xboxdrv-not-working/15291/26
+https://www.raspberrypi.org/forums/viewtopic.php?t=70437
+
+edit /boot/cmdline.txt:
+
+sudo nano /boot/cmdline.txt
+
+Add the line:
+
+dwc_otg.fiq_fsm_mask=0x7
+
+
+
 ## How to run
 
 Run the buzzer component on the Pi following [this](https://github.com/crossbario/iotcookbook/tree/master/device/pi#how-to-run) general procedure.
