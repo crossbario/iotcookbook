@@ -6,10 +6,12 @@ Here you can find cookbook recipes for the Raspberry Pi and the Crossbar.io IoT 
 * [x] [gamepad](gamepad) - A Xbox game controller exposed as a WAMP component in Python. Allows for a powerful, cheap real-time controller.
 * [ ] neopixel
 * [ ] hexdisplay
-* [ ] nfc
+* [ ] adcconv
+* [ ] nfctag
 * [ ] speechsynth
 * [ ] sampleplayer
 * [ ] photocamera
 * [ ] videorecorder
 * [ ] webinterface
 * [ ] canbus
+* [ ] chromeapp (see [here](https://developer.chrome.com/apps/first_app))

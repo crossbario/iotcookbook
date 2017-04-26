@@ -73,16 +73,27 @@ connection.onopen = function (new_session, details) {
 
         console.log('gamepad data received (retained=' + details.retained + '):', last, changed);
 
-        if (last.LB === 1) {
+        if (changed.LB && last.LB === 1) {
             pad1.style.backgroundColor = '#ff0';
         } else {
             pad1.style.backgroundColor = '#999';
         }
 
-        if (last.RB === 1) {
+        if (changed.RB && last.RB === 1) {
             pad2.style.backgroundColor = '#ff0';
         } else {
             pad2.style.backgroundColor = '#999';
+        }
+
+        if (changed.X) {
+            if (last.X === 1) {
+                beep(5, 100, 50);
+            }
+        }
+        if (changed.Y) {
+            if (last.Y === 1) {
+                beep(3, 300, 200);
+            }
         }
 
         if (last.X1 || last.Y1) {
@@ -139,3 +150,20 @@ connection.onclose = function (reason, details) {
 
 // now actually open the connection
 connection.open();
+
+// this will be used from UI elements
+function beep(count, on, off) {
+    if (session) {
+        var uri = 'io.crossbar.demo.iotstarterkit.' + serial + '.buzzer.beep';
+        session.call(uri, [count, on, off]).then(
+            function () {
+                console.log('beeped!');
+            },
+            function (err) {
+                console.log('beeping failed:', err);
+            }
+        );
+    } else {
+        console.log('cannot beep: not connected');
+    }
+}
