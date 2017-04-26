@@ -67,24 +67,25 @@ connection.onopen = function (new_session, details) {
         }
     );
 
-    function on_data (args) {
-        var data = args[0];
+    function on_data (args, kwargs, details) {
+        var last = args[0];
+        var changed = args[1];
 
-        console.log('gamepad data received:', data);
+        console.log('gamepad data received (retained=' + details.retained + '):', last, changed);
 
-        if (data.LB === 1) {
+        if (last.LB === 1) {
             pad1.style.backgroundColor = '#ff0';
         } else {
             pad1.style.backgroundColor = '#999';
         }
 
-        if (data.RB === 1) {
+        if (last.RB === 1) {
             pad2.style.backgroundColor = '#ff0';
         } else {
             pad2.style.backgroundColor = '#999';
         }
 
-        if (data.X1 || data.Y1) {
+        if (last.X1 || last.Y1) {
             var w = window.innerWidth;
             var h = window.innerHeight;
             var r;
@@ -93,17 +94,17 @@ connection.onopen = function (new_session, details) {
             } else {
                 r = w;
             }
-            if (data.X1) {
-                var x = Math.round(w/2 + r * (data.X1 / 60000));
+            if (last.X1) {
+                var x = Math.round(w/2 + r * (last.X1 / 60000));
                 zini1.style.left = '' + x + 'px';
             }
-            if (data.Y1) {
-                var y = Math.round(h/2 - r * (data.Y1 / 60000));
+            if (last.Y1) {
+                var y = Math.round(h/2 - r * (last.Y1 / 60000));
                 zini1.style.top = '' + y + 'px';
             }
         }
 
-        if (data.X2 || data.Y2) {
+        if (last.X2 || last.Y2) {
             var w = window.innerWidth;
             var h = window.innerHeight;
             var r;
@@ -112,18 +113,18 @@ connection.onopen = function (new_session, details) {
             } else {
                 r = w;
             }
-            if (data.X2) {
-                var x = Math.round(w/2 + r * (data.X2 / 60000));
+            if (last.X2) {
+                var x = Math.round(w/2 + r * (last.X2 / 60000));
                 zini2.style.left = '' + x + 'px';
             }
-            if (data.Y2) {
-                var y = Math.round(h/2 - r * (data.Y2 / 60000));
+            if (last.Y2) {
+                var y = Math.round(h/2 - r * (last.Y2 / 60000));
                 zini2.style.top = '' + y + 'px';
             }
         }
     }
 
-    session.subscribe(prefix + 'on_data', on_data);
+    session.subscribe(prefix + 'on_data', on_data, {get_retained: true});
 };
 
 

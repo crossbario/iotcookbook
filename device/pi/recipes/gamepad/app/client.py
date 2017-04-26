@@ -17,6 +17,7 @@ from twisted.internet.error import ReactorNotRunning
 
 from autobahn.util import utcnow
 from autobahn.twisted.util import sleep
+from autobahn.wamp.types import PublishOptions
 from autobahn.twisted.wamp import ApplicationSession, ApplicationRunner
 from autobahn.wamp.exception import ApplicationError
 
@@ -65,10 +66,9 @@ class XboxdrvReceiver(LineReceiver):
             # if WAMP session is active and change set is non-empty,
             # forward the controller data to the WAMP session
             if len(changed):
-                self.log.info("XboxdrvReceiver event data: {changed}", changed=changed)
-                if self._session:
-                    self._session.on_data(data)
                 self._last = data
+                if self._session:
+                    self._session.on_data(changed, self._last)
 
 
 class XboxControllerAdapter(ApplicationSession):
@@ -132,11 +132,12 @@ class XboxControllerAdapter(ApplicationSession):
         else:
             return None
 
-    def on_data(self, data):
+    def on_data(self, changed, last):
         """
         Hook that fires when xbox controller has emitted some data.
         """
-        self.publish(u'{}.on_data'.format(self._prefix), data)
+        self.publish(u'{}.on_data'.format(self._prefix), last, changed, options=PublishOptions(retain=True))
+        self.log.info("on_data event published: last={last}, changed={changed}", changed=changed, last=last)
 
     def onLeave(self, details):
         self.log.info("session closed: {details}", details=details)

@@ -23,12 +23,23 @@
                 line-height: 1.6em;
             }
 
+            #logo {
+                display: block;
+                width: 300px;
+                margin: auto;
+                margin-bottom: 40px;
+            }
+
             .pad {
                 display: inline-block;
                 width: 80px;
                 height: 80px;
                 background-color: #999;
-                margin:10px;
+                margin: 10px;
+                text-align: center;
+                vertical-align: middle;
+                font-size: 18px;
+                font-weight: bold;
             }
 
             .zini {
@@ -50,6 +61,8 @@
     <body>
         <div id="zini1" class="zini">1</div>
         <div id="zini2" class="zini">2</div>
+
+        <img id="logo" src="http://crossbar.io/static/img/gen/crossbar_icon_and_text_vectorized.svg" />
 
         <h1>Crossbar.io IoT Cookbook: Pi/Gamepad Frontend</h1>
 
@@ -77,7 +90,7 @@
 
         <h2>Pad Indicator</h2>
         <p>
-            When button XX is hit on the gamepad, this indicator is flashed.
+            When button Left or Right Button is hit on the gamepad, this indicator is flashed.
         </p>
         <p>
             <div id="pad1" class="pad">LB</div>

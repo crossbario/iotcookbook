@@ -1,111 +1,110 @@
-# Crossbar.io IoT Starterkit - Buzzer
+# Raspberry Pi - Gamepad
 
-This component exposes the piezo buzzer built into the Crossbar.io IoT Starterkit in a WAMP component. The piezo buzzer is wrapped as a WAMP component and can then be used as a acoustic warning or notification device within a WAMP based application.
+This component exposes a wireless Xbox controller connected to a Raspberry Pi as a WAMP component.
 
-
-https://discourse.osmc.tv/t/april-update-xboxdrv-not-working/15291/26
-https://www.raspberrypi.org/forums/viewtopic.php?t=70437
-
-edit /boot/cmdline.txt:
-
-sudo nano /boot/cmdline.txt
-
-Add the line:
-
-dwc_otg.fiq_fsm_mask=0x7
-
+The Xbox controller is wrapped as a WAMP component and can then be used as a powerful real-time input controller within a WAMP based application.
 
 
 ## How to run
 
-Run the buzzer component on the Pi following [this](https://github.com/crossbario/iotcookbook/tree/master/device/pi#how-to-run) general procedure.
+First, add the following to `/boot/cmdline.txt`
+
+```
+dwc_otg.fiq_fsm_mask=0x7
+```
+
+and reboot the Pi.
+
+> The need for this is explained [here](https://discourse.osmc.tv/t/april-update-xboxdrv-not-working/15291/26) and [here](https://www.raspberrypi.org/forums/viewtopic.php?t=70437).
+
+Run the gamepad component on the Pi following [this](https://github.com/crossbario/iotcookbook/tree/master/device/pi#how-to-run) general procedure.
 
 Then open
 
-* [https://demo.crossbar.io/iotcookbook/device/pi/recipes/buzzer?serial=41f4b2fb](https://demo.crossbar.io/iotcookbook/device/pi/recipes/buzzer?serial=41f4b2fb)
+* [https://demo.crossbar.io/iotcookbook/device/pi/recipes/gamepad?serial=41f4b2fb](https://demo.crossbar.io/iotcookbook/device/pi/recipes/gamepad?serial=41f4b2fb)
 
 in your browser - anywhere.
 
 > Replace `41f4b2fb` with the serial No. of your Pi (`grep Serial /proc/cpuinfo`).
 
-You should see a Web frontend that allows you to control the piezo buzzer on the Pi remotely.
+You should see a Web frontend that shows two buttons and two anlog controls of the Xbox controller in real-time.
 
 
 ## Hardware
 
-The Crossbar.io IoT Starterkit has a built in piezo buzzer connected to GPIO 16 (Pin 36) with active high.
+You will need a Microsoft Xbox controller, a wired one or a wireless one with a USB receiver connected via USB to your Raspberry Pi.
 
 
 ## Software
 
-The component is written in Python using Autobahn running on Twisted. The [Dockerfile](Dockerfile) for the component uses the default `crossbario/autobahn-python-armhf` image as base.
+The component is written in Python using Autobahn running on Twisted.
+
+The [Dockerfile](Dockerfile) for the component uses the default `crossbario/autobahn-python-armhf` image as base.
+
+Further, the component uses [xboxdrv](https://github.com/xboxdrv/xboxdrv), a Xbox gamepad userspace driver for Linux. The Python component talks to xboxdrv over stdin pipe. xboxdrv when running will output gamepad controller values by printing lines to stdout, and the Python component receives these lines via stdin, parses the lines, and publishes WAMP events.
 
 
 ## API
 
 The component uses an URI prefix containing the Pi serial number
 
-* `io.crossbar.demo.iotstarterkit.<serial>.buzzer`
+* `io.crossbar.demo.iotstarterkit.<serial>.gamepad`
 
 eg the Pi with serial no. `41f4b2fb` will use URIs starting with
 
-* `io.crossbar.demo.iotstarterkit.41f4b2fb.buzzer`
+* `io.crossbar.demo.iotstarterkit.41f4b2fb.gamepad`
 
 
 ### Procedures
 
-#### beep
+#### started
 
-To trigger a beeping sound sequence, call
+To get the UTC timestamp (ISO8601 format) when the component started, call
 
-* `io.crossbar.demo.iotstarterkit.<serial>.buzzer.beep(count, on, off)`
+* `io.crossbar.demo.iotstarterkit.<serial>.gamepad.started()`
 
-with (positional) parameters
+The procedure takes no parameters and returns the timestamp as a string.
 
-* `count`: Number of beeps, default `1`.
-* `on`: ON duration in ms, default `30`.
-* `off`: OFF duration in ms, default `80`.
+#### get_data
 
-#### is_beeping
+To retrieve the latest full set of gamepad readings, call
 
-To check whether the buzzer is currently beeping, call
+* `io.crossbar.demo.iotstarterkit.<serial>.gamepad.get_data()`
 
-* `io.crossbar.demo.iotstarterkit.<serial>.buzzer.is_beeping()`
+The procedure takes no parameters and returns a single positional result with a dictionary:
 
-The procedure takes no parameters and returns a single positional result with a boolean flag.
-
-#### welcome
-
-To play a whole welcome beeping sequence, call
-
-* `io.crossbar.demo.iotstarterkit.<serial>.buzzer.welcome()`
-
-The procedure takes no parameters.
-
+* A
+* B
+* LB
+* LT
+* RB
+* TL
+* TR
+* X
+* X1
+* X2
+* Y
+* Y1
+* Y2
+* back
+* dd
+* dl
+* dr
+* du
+* guide
+* start
 
 ### Events
 
-#### on_beep_started
+#### on_data
 
 The component will emit an event
 
-* `io.crossbar.demo.iotstarterkit.<serial>.buzzer.on_beep_started(..)`
+* `io.crossbar.demo.iotstarterkit.<serial>.gamepad.on_data(last, changed)`
 
-with keyword-based parameters:
+with two positional parameters:
 
-* `count`: Number of beeps in the started sequence.
-* `on`: ON duration in ms in the started sequence.
-* `off`: OFF duration in ms in the started sequence.
+* `last`: The latest full set of readings from the gamepad.
+* `changed`: The changed readings in this event compared to the latest state before
 
-#### on_beep_ended
-
-When the current beeping sequence is finished, the component will emit en event
-
-* `io.crossbar.demo.iotstarterkit.<serial>.buzzer.on_beep_ended()`
-
-
-### Errors
-
-When a beeping sequence is currently playing, calling `beep()` will raise an error:
-
-* `io.crossbar.demo.iotstarterkit.<serial>.buzzer.already-beeping()`
+Both attributes are dictionaries with attributes as listed in `get_data()`.
