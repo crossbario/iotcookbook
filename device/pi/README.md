@@ -5,9 +5,11 @@ This part of the IoT Cookbook provides information, howtos and recipes for the R
 
 ## How to run
 
-Running the recipes here is only few commands away, eg the following describes how to start the [Buzzer Recipe](recipes/buzzer). This assumes you have a Linux with Docker running on the Pi, eg Raspbian with Docker.
+Running the recipes here is only few commands away, eg the following describes how to run the [Buzzer Recipe](recipes/buzzer).
 
-Clone the [crossbario/iotcookbook](https://github.com/crossbario/iotcookbook) repository on your Pi:
+This assumes you have a Linux with Docker running on the Pi, eg Raspbian with Docker.
+
+First clone the [crossbario/iotcookbook](https://github.com/crossbario/iotcookbook) repository **on your Pi**:
 
 ```console
 ssh pi@raspberrypi.local
@@ -16,7 +18,7 @@ git clone https://github.com/crossbario/iotcookbook.git
 
 > You should replace `pi@raspberrypi.local` here and in all command down below with the `user@hostname` of your Pi.
 
-Alternatively, you can clone the repo on your notebook:
+Alternatively, you can clone the repo **on your notebook**:
 
 ```console
 cd ~
@@ -26,14 +28,15 @@ git clone https://github.com/crossbario/iotcookbook.git
 and then mount this local working copy *on* your Pi *from* your notebook:
 
 ```console
-dpipe /usr/lib/openssh/sftp-server = ssh pi@raspberrypi.local sshfs :${HOME}/iotcookbook /home/pi/iotcookbook -o slave &
+dpipe /usr/lib/openssh/sftp-server = ssh pi@raspberrypi.local \
+    sshfs :${HOME}/iotcookbook /home/pi/iotcookbook -o slave &
 ```
 
-The advantage using this method is an easier development workflow, since you can edit files on your notebook, and only use the remote shell session on your Pi to restart your changed code and such.
+The advantage using the latter method is an easier development workflow, since you can edit files on your notebook, and only use the remote shell session on your Pi to restart your changed code and such.
 
 > Above command makes use of a technique called "reverse SSHFS", eg see [here](https://blog.dhampir.no/content/reverse-sshfs-mounts-fs-push)
 
-Regardless of which approach you've followed, remotely log into your Pi and start the component:
+Regardless of which approach you've followed, now remotely log into your Pi and start the component:
 
 ```
 cd iotcookbook/device/pi/recipes/buzzer
@@ -74,6 +77,8 @@ docker run -it --rm \
 2017-04-26T12:54:37+0000 BuzzerComponent connected: SessionDetails(realm=<crossbardemo>, session=1410140973480360, authid=<A6J9-7TEY-4U7E-SUPQ-EQRK-KH6E>, authrole=<anonymous>, authmethod=anonymous, authprovider=static, authextra=None, resumed=None, resumable=None, resume_token=None)
 2017-04-26T12:54:37+0000 BuzzerComponent ready!
 ```
+
+That's it. You've successfully deployed and run an Autobahn based application component that exposes hardware on the Pi as a WAMP component. The wrapped hardware can now interact with any other WAMP component in your overall application or system.
 
 
 ## How it works
