@@ -1,6 +1,18 @@
 # Crossbar.io IoT Starterkit - Buzzer
 
-This component exposes the piezo buzzer built into the Crossbar.io IoT Starterkit in a WAMP component. The piezo buzzer is wrapped as a WAMP component and can then be used as a acoustic warning or notification device within a WAMP based application.
+Tags: Python, GPIO, buzzer
+
+1. [Synopsis](#synopsis)
+1. [How to run](#how-to-run)
+1. [API](#api)
+
+---
+
+## Synposis
+
+This component exposes the piezo buzzer built into the Crossbar.io IoT Starterkit as a WAMP component and can then be used as a acoustic warning or notification device within a WAMP based application.
+
+The Crossbar.io IoT Starterkit has a built in piezo buzzer connected to GPIO 16 (Pin 36) with active high. The component is written in Python using Autobahn running on Twisted. The [Dockerfile](Dockerfile) for the component uses the default `crossbario/autobahn-python-armhf` image as base.
 
 
 ## How to run
@@ -19,15 +31,6 @@ in your browser - anywhere.
 
 You should see a Web frontend that allows you to control the piezo buzzer on the Pi remotely.
 
-
-## Hardware
-
-The Crossbar.io IoT Starterkit has a built in piezo buzzer connected to GPIO 16 (Pin 36) with active high.
-
-
-## Software
-
-The component is written in Python using Autobahn running on Twisted. The [Dockerfile](Dockerfile) for the component uses the default `crossbario/autobahn-python-armhf` image as base.
 
 ## API
 
