@@ -9,6 +9,7 @@ This part of the IoT Cookbook provides information, howtos and [components](comp
 2. [How it works](#how-it-works)
     1. [Creating an app component image](#creating-an-app-component-image)
     1. [Starting an app component image](#starting-an-app-component-image)
+    1. [Device URIs](#device-uris)
 
 ## How to run
 
@@ -31,6 +32,8 @@ touch /media/oberstet/boot/ssh
 sudo sync
 ```
 
+> Replace `/media/oberstet` with the mount path of the SD card with the mounted Rasbian image.
+
 Now SSH into the Pi (the default password is `raspberry`):
 
 ```console
@@ -46,20 +49,23 @@ sudo apt dist-upgrade
 
 and install Docker
 
-```
+```console
 curl -sSL get.docker.com | sh
 sudo systemctl enable docker
 sudo usermod -aG docker pi
 sudo reboot
 ```
 
-Test Docker:
+Test Docker by starting a shell in a plain Linux (Alpine) container:
 
 ```console
 docker run -it --rm armhf/alpine /bin/sh
 ```
 
+
 ### Clone the Cookbook
+
+To work with the cookbook (or your fork thereof), here are two options we recommend:
 
 **Option 1**
 
@@ -72,7 +78,7 @@ git clone https://github.com/crossbario/iotcookbook.git
 
 > You should replace `pi@raspberrypi.local` here and in all command down below with the `user@hostname` of your Pi.
 
-The advantage of this method is it is simple and works. The disadvantage is that you now have to edit your files *on* the Pi, and also commit and push from there.
+The advantage of this method is: it is simple and just works. The disadvantage is that you now have to edit your files *on* the Pi, and also commit and push from there.
 
 **Option 2**
 
@@ -107,7 +113,7 @@ The advantage using this method is an easier development workflow, since you can
 
 Regardless of which approach you've followed, now remotely log into your Pi, change to the directory within the cookbook repo with a component such as `buzzer` and start the component:
 
-```
+```console
 cd iotcookbook/device/pi/components/buzzer
 make start
 ```
@@ -155,15 +161,7 @@ docker run -it --rm \
 2017-04-26T12:54:37+0000 BuzzerComponent ready!
 ```
 
-The component uses a URI prefix containing the Pi serial number. To check the serial number of your Pi:
-
-```console
-pi@raspberrypi:~ $ grep Serial /proc/cpuinfo
-Serial      : 0000000041f4b2fb
-```
-
 That's it. You've successfully deployed and run an Autobahn based application component that exposes hardware on the Pi as a WAMP component. The wrapped hardware can now interact with any other WAMP component in your overall application or system.
-
 
 
 ## How it works
@@ -179,7 +177,7 @@ docker build -t cookbook-buzzer -f Dockerfile .
 The [Dockerfile](components/buzzer/Dockerfile) derives a component specific Docker image from one of the [base Docker images](https://github.com/crossbario/crossbar-docker/blob/master/IMAGES.md) we provide for Autobahn based components:
 
 
-```
+```console
 FROM crossbario/autobahn-python-armhf
 
 # install component specific dependencies
@@ -226,3 +224,19 @@ Further, a couple of extra permissions are given to the started container to all
 Finally, we allow arbitrary networking (this is to simplify things here, for production you want to restrict that).
 
 
+### Device URIs
+
+The component uses a device URI prefix containing the Pi serial number. To check the serial number of your Pi:
+
+```console
+pi@raspberrypi:~ $ grep Serial /proc/cpuinfo
+Serial      : 0000000041f4b2fb
+```
+
+The serial number with the leading `0` digits removed is `41f4b2fb`. Hence, an instance of the application component running on *this* Pi will use URIs of the form:
+
+* `io.crossbar.demo.iotstarterkit.<serial>.buzzer.<suffix>`
+
+with `41f4b2fb` for `<serial>`, and suffix parts like `beep` for `<suffix>`.
+
+That way, eg each procedure on each device can be addressed in a systematic way.
