@@ -5,9 +5,58 @@ This part of the IoT Cookbook provides information, howtos and [components](comp
 
 ## How to run
 
-Running the components here is only few commands away, eg the following describes how to run the [Buzzer Recipe](components/buzzer).
+Running the components here is only few commands away. The following describes how to run the [Buzzer Recipe](components/buzzer) as an example.
+
+1. [Install Docker](#install-docker)
+2. [Clone the Cookbook](#clone-the-cookbook)
+3. [Run a Recipe](#run-a-recipe)
+
+### Install Docker
 
 This assumes you have a Linux with Docker running on the Pi, eg Raspbian with Docker.
+
+Download [Raspbian Jessie Lite](https://downloads.raspberrypi.org/raspbian_lite_latest), unpack and write the image to a SD card:
+
+```console
+sudo dd if=~/2017-04-10-raspbian-jessie-lite.img of=/dev/sdb bs=1M oflag=sync
+```
+
+As of the November 2016 release, Raspbian has the SSH server disabled by default (see [here](https://www.raspberrypi.org/documentation/remote-access/ssh/)). To enable SSH, mount the image on your PC and add a single file empty  `/boot/ssh`
+
+```console
+touch /media/oberstet/boot/ssh
+sudo sync
+```
+
+Now SSH into the Pi (the default password is `raspberry`):
+
+```console
+ssh pi@192.168.1.31
+```
+
+Update the system
+
+```console
+sudo apt update
+sudo apt dist-upgrade
+```
+
+and install Docker
+
+```
+curl -sSL get.docker.com | sh
+sudo systemctl enable docker
+sudo usermod -aG docker pi
+sudo reboot
+```
+
+Test Docker:
+
+```console
+docker run -it --rm armhf/alpine /bin/sh
+```
+
+### Clone the Cookbook
 
 First clone the [crossbario/iotcookbook](https://github.com/crossbario/iotcookbook) repository **on your Pi**:
 
@@ -40,6 +89,9 @@ dpipe /usr/lib/openssh/sftp-server = ssh pi@raspberrypi.local \
 The advantage using the latter method is an easier development workflow, since you can edit files on your notebook, and only use the remote shell session on your Pi to restart your changed code and such.
 
 > Above command makes use of a technique called "reverse SSHFS", eg see [here](https://blog.dhampir.no/content/reverse-sshfs-mounts-fs-push)
+
+
+### Run a Recipe
 
 Regardless of which approach you've followed, now remotely log into your Pi and start the component:
 
@@ -91,7 +143,6 @@ docker run -it --rm \
 2017-04-26T12:54:37+0000 BuzzerComponent ready!
 ```
 
-
 The component uses a URI prefix containing the Pi serial number. To check the serial number of your Pi:
 
 ```console
@@ -99,8 +150,8 @@ pi@raspberrypi:~ $ grep Serial /proc/cpuinfo
 Serial      : 0000000041f4b2fb
 ```
 
-
 That's it. You've successfully deployed and run an Autobahn based application component that exposes hardware on the Pi as a WAMP component. The wrapped hardware can now interact with any other WAMP component in your overall application or system.
+
 
 
 ## How it works

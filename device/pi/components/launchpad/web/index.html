@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Crossbar.io IoT Cookbook - Pi/Buzzer</title>
+
+    <head>
+        <style>
+            html {
+                margin: 0;
+                padding: 0;
+                width: 100%;
+                height: 100%;
+            }
+
+            body {
+                margin: auto;
+                padding-top: 3em;
+                width: 800px;
+                color: #444;
+                background-color: #eee;
+                font-family: sans-serif;
+                line-height: 1.6em;
+            }
+
+            #buzzer {
+                width: 200px;
+                height: 100px;
+                background-color: #999;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Crossbar.io IoT Cookbook: Pi/Buzzer Frontend</h1>
+
+        <p>
+            This is the demo frontend for the
+            <a href="https://github.com/crossbario/iotcookbook/tree/master/device/pi/recipes/buzzer">
+            Buzzer Recipe</a> in the Crossbar.io IoT Cookbook.
+        </p>
+
+        <h2>Status</h2>
+        <table>
+            <tr>
+                <td>Connected to URL (protocol)</td><td><b id="status_url">-</b></td>
+            </tr>
+            <tr>
+                <td>Joined as authid@realm</td><td><b id="status_realm">-</b></td>
+            </tr>
+            <tr>
+                <td>Addressing Pi with serial No.:</td><td><b id="status_serial">-</b></td>
+            </tr>
+            <tr>
+                <td>Pi component started (UTC)</td><td><b id="status_started">-</b></td>
+            </tr>
+        </table>
+
+        <h2>Buzzer Trigger</h2>
+        <p>
+            Click one of the buttons to start a beeping sequence on the piezo buzzer connected to the Pi.
+        </p>
+        <p>
+            <button onclick="beep();">Beep 1x</button>
+            <button onclick="beep(5);">Beep 5x</button>
+            <button onclick="beep(3, 400, 100);">Beep 3x long</button>
+        </p>
+
+        <h2>Buzzer Indicator</h2>
+        <p>
+            When the buzzer on the Pi is active (playing a beep sequence), this indicator is flashed.
+        </p>
+        <p>
+            <div id="buzzer"></div>
+        </p>
+
+        <script>AUTOBAHN_DEBUG = false;</script>
+        <script src="https://demo.crossbar.io/shared/autobahn/autobahn.min.js"></script>
+        <script src="client.js"></script>
+   </body>
+</html>

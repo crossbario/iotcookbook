@@ -71,28 +71,51 @@ connection.onopen = function (new_session, details) {
         var last = args[0];
         var changed = args[1];
 
-        console.log('gamepad data received (retained=' + details.retained + '):', last, changed);
+        console.log('game-pad data received (retained=' + details.retained + ', last=' + JSON.stringify(last) + ', changed=' + JSON.stringify(changed) + ')');
 
-        if (changed.LB && last.LB === 1) {
-            pad1.style.backgroundColor = '#ff0';
-        } else {
-            pad1.style.backgroundColor = '#999';
+        if ('LB' in changed) {
+            if (last.LB === 1) {
+                pad1.style.backgroundColor = '#ff0';
+                rand_light(3, 0);
+            } else {
+                pad1.style.backgroundColor = '#999';
+            }
         }
 
-        if (changed.RB && last.RB === 1) {
-            pad2.style.backgroundColor = '#ff0';
-        } else {
-            pad2.style.backgroundColor = '#999';
+        if ('RB' in changed) {
+            if (last.RB === 1) {
+                pad2.style.backgroundColor = '#ff0';
+                rand_light(0, 3);
+            } else {
+                pad2.style.backgroundColor = '#999';
+            }
         }
 
         if (changed.X) {
-            if (last.X === 1) {
+            if (last.X == 1) {
                 beep(5, 100, 50);
             }
         }
         if (changed.Y) {
-            if (last.Y === 1) {
+            if (last.Y == 1) {
                 beep(3, 300, 200);
+            }
+        }
+
+        if (changed.A) {
+            if (last.A == 1) {
+                console.log('A');
+                launchpad_reset();
+            } else {
+                console.log('A?', last.A);
+            }
+        }
+        if (changed.B) {
+            if (last.B == 1) {
+                console.log('B');
+                light_single_test();
+            } else {
+                console.log('B?', last.B);
             }
         }
 
@@ -165,5 +188,55 @@ function beep(count, on, off) {
         );
     } else {
         console.log('cannot beep: not connected');
+    }
+}
+
+function launchpad_reset() {
+    if (session) {
+        var uri = 'io.crossbar.demo.iotstarterkit.' + serial + '.launchpad.reset';
+        session.call(uri).then(
+            function () {
+                console.log('reset!');
+            },
+            function (err) {
+                console.log('reset failed:', err);
+            }
+        );
+    } else {
+        console.log('cannot test: not connected');
+    }
+}
+
+function light_single_test() {
+    if (session) {
+        var uri = 'io.crossbar.demo.iotstarterkit.' + serial + '.launchpad.light_single_test';
+        session.call(uri).then(
+            function () {
+                console.log('tested!');
+            },
+            function (err) {
+                console.log('testing failed:', err);
+            }
+        );
+    } else {
+        console.log('cannot test: not connected');
+    }
+}
+
+function rand_light(red,green) {
+    if (session) {
+        var uri = 'io.crossbar.demo.iotstarterkit.' + serial + '.launchpad.light';
+        var x = Math.round(Math.random() * 8);
+        var y = Math.round(Math.random() * 8);
+        session.call(uri, [x, y, red, green]).then(
+            function () {
+                console.log('light set!');
+            },
+            function (err) {
+                console.log('setting light failed:', err);
+            }
+        );
+    } else {
+        console.log('cannot test: not connected');
     }
 }
