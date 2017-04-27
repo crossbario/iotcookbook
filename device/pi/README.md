@@ -13,13 +13,18 @@ This part of the IoT Cookbook provides information, howtos and [components](comp
 
 ## How to run
 
-Getting started with the Pi recipes is very easy and quick, as we provide Docker base images for everthing. The following describes how to run the [Buzzer Recipe](components/buzzer) as an example.
+Getting started with the Pi recipes is very easy and quick, as we provide Docker base images for everthing. All you need is eg a stock Rasbian and Docker.
+
+> The following describes how to run the [Buzzer Recipe](components/buzzer) as an example. All other Autobahn Python and JavaScript recipes work similar. The Autobahn C++ recipes work different though, please see the respective cookbook sections.
+
 
 ### Install Docker
 
 As we are using Docker, you will need to have a Docker enabled Rasbian or Linux running.
 
-Docker on Rasbian is fully supported. Download [Raspbian Jessie Lite](https://downloads.raspberrypi.org/raspbian_lite_latest), unpack and write the image to a SD card:
+Docker on Rasbian is fully supported, but needs to be installed.
+
+Download [Raspbian Jessie Lite](https://downloads.raspberrypi.org/raspbian_lite_latest), unpack and write the image to a SD card:
 
 ```console
 sudo dd if=~/2017-04-10-raspbian-jessie-lite.img of=/dev/sdb bs=1M oflag=sync
