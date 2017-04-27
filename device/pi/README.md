@@ -25,7 +25,7 @@ Docker on Rasbian is fully supported. Download [Raspbian Jessie Lite](https://do
 sudo dd if=~/2017-04-10-raspbian-jessie-lite.img of=/dev/sdb bs=1M oflag=sync
 ```
 
-To enable SSH server (this is required since 2016/11), mount the image on your PC and add a single file empty  `/boot/ssh`
+To enable SSH server (this is required since 2016/11), mount the image on your PC and add a single empty file `/boot/ssh`
 
 ```console
 touch /media/oberstet/boot/ssh
@@ -34,10 +34,10 @@ sudo sync
 
 > Replace `/media/oberstet` with the mount path of the SD card with the mounted Rasbian image.
 
-Now SSH into the Pi (the default password is `raspberry`):
+Now SSH into the Pi (the default hostname and default password is `raspberry`):
 
 ```console
-ssh pi@192.168.1.31
+ssh pi@raspberry.local
 ```
 
 Update the system
@@ -65,7 +65,7 @@ docker run -it --rm armhf/alpine /bin/sh
 
 ### Clone the Cookbook
 
-To work with the cookbook (or your fork thereof), here are two options we recommend:
+To work with the cookbook (or your fork thereof), here are two options:
 
 **Option 1**
 
@@ -78,7 +78,7 @@ git clone https://github.com/crossbario/iotcookbook.git
 
 > You should replace `pi@raspberrypi.local` here and in all command down below with the `user@hostname` of your Pi.
 
-The advantage of this method is: it is simple and just works. The disadvantage is that you now have to edit your files *on* the Pi, and also commit and push from there.
+The advantage of this method is: it is simple and just works. The disadvantage is that you now have to edit your files *on* the Pi using an editor like nano or vim, and also commit and push from there.
 
 **Option 2**
 
@@ -104,7 +104,7 @@ dpipe /usr/lib/openssh/sftp-server = ssh pi@raspberrypi.local \
 
 > The `dpipe` command comes as part of the [vde2 package](https://packages.debian.org/search?keywords=vde2), which can be installed with `sudo apt-get install -y vde2`.
 
-The advantage using this method is an easier development workflow, since you can edit files on your notebook, commit and push from there and only use the remote shell session on your Pi to restart your changed code and such.
+The advantage using this method is an easier development workflow, since you can (directly) edit files on your notebook using eg Sublime or Atom, commit and push from there and only use the remote shell session on your Pi to restart your changed code and such.
 
 > Above command makes use of a technique called "reverse SSHFS", eg see [here](https://blog.dhampir.no/content/reverse-sshfs-mounts-fs-push)
 
@@ -166,6 +166,8 @@ That's it. You've successfully deployed and run an Autobahn based application co
 
 ## How it works
 
+The component is built as a Docker image which derives from one of our Autobahn base images. The Docker image for the app component is then started on the Pi.
+
 ### Creating an app component image
 
 The `make start` command will first build a Docker image named `cookbook-buzzer`:
@@ -226,7 +228,7 @@ Finally, we allow arbitrary networking (this is to simplify things here, for pro
 
 ### Device URIs
 
-The component uses a device URI prefix containing the Pi serial number. To check the serial number of your Pi:
+Finally, the component uses a device URI prefix containing the Pi serial number. To check the serial number of your Pi:
 
 ```console
 pi@raspberrypi:~ $ grep Serial /proc/cpuinfo
