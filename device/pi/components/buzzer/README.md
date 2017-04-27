@@ -19,16 +19,18 @@ The Crossbar.io IoT Starterkit has a built in piezo buzzer connected to GPIO 16 
 
 ## How to run
 
-Run the buzzer component on the Pi following [this](https://github.com/crossbario/iotcookbook/tree/master/device/pi#how-to-run) general procedure.
+Run the buzzer component on the Pi following **[this procedure](https://github.com/crossbario/iotcookbook/tree/master/device/pi#how-to-run)**:
 
 ```console
 cd iotcookbook/device/pi/component/buzzer
 make start
 ```
 
+Here is what you should see
+
 [![asciicast](https://asciinema.org/a/bhvvnuwo609gbn5b0l567pn78.png)](https://asciinema.org/a/bhvvnuwo609gbn5b0l567pn78)
 
-Then open
+Then open this URL
 
 * [https://demo.crossbar.io/iotcookbook/device/pi/recipes/buzzer?serial=41f4b2fb](https://demo.crossbar.io/iotcookbook/device/pi/recipes/buzzer?serial=41f4b2fb)
 
@@ -36,7 +38,7 @@ in your browser.
 
 > Replace `41f4b2fb` with the serial number of your Pi (`grep Serial /proc/cpuinfo`).
 
-You should see a Web frontend that allows you to control the piezo buzzer on the Pi remotely.
+You should see a Web page with buttons to control the piezo buzzer on your Pi.
 
 
 ## API
