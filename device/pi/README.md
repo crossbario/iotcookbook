@@ -13,19 +13,19 @@ This part of the IoT Cookbook provides information, howtos and [components](comp
 
 ## How to run
 
-Running the components here is only few commands away. The following describes how to run the [Buzzer Recipe](components/buzzer) as an example.
+Getting started with the Pi recipes is very easy and quick, as we provide Docker base images for everthing. The following describes how to run the [Buzzer Recipe](components/buzzer) as an example.
 
 ### Install Docker
 
-This assumes you have a Linux with Docker running on the Pi, eg Raspbian with Docker.
+As we are using Docker, you will need to have a Docker enabled Rasbian or Linux running.
 
-Download [Raspbian Jessie Lite](https://downloads.raspberrypi.org/raspbian_lite_latest), unpack and write the image to a SD card:
+Docker on Rasbian is fully supported. Download [Raspbian Jessie Lite](https://downloads.raspberrypi.org/raspbian_lite_latest), unpack and write the image to a SD card:
 
 ```console
 sudo dd if=~/2017-04-10-raspbian-jessie-lite.img of=/dev/sdb bs=1M oflag=sync
 ```
 
-As of the November 2016 release, Raspbian has the SSH server disabled by default (see [here](https://www.raspberrypi.org/documentation/remote-access/ssh/)). To enable SSH, mount the image on your PC and add a single file empty  `/boot/ssh`
+To enable SSH server (this is required since 2016/11), mount the image on your PC and add a single file empty  `/boot/ssh`
 
 ```console
 touch /media/oberstet/boot/ssh
