@@ -26,11 +26,11 @@ cd iotcookbook/device/pi/component/buzzer
 make start
 ```
 
-Here is what you should see
+Here is how that looks:
 
 [![asciicast](https://asciinema.org/a/bhvvnuwo609gbn5b0l567pn78.png)](https://asciinema.org/a/bhvvnuwo609gbn5b0l567pn78)
 
-Then open this URL
+Then open this URL:
 
 * [https://demo.crossbar.io/iotcookbook/device/pi/recipes/buzzer?serial=41f4b2fb](https://demo.crossbar.io/iotcookbook/device/pi/recipes/buzzer?serial=41f4b2fb)
 
@@ -38,7 +38,11 @@ in your browser.
 
 > Replace `41f4b2fb` with the serial number of your Pi (`grep Serial /proc/cpuinfo`).
 
-You should see a Web page with buttons to control the piezo buzzer on your Pi.
+You should see a Web page with buttons to control the piezo buzzer on your Pi. Pressing a button on the Web page will issue a WAMP remote procedure call to the `beep()` procedure exposed by the buzzer component running on the Pi.
+
+This demonstrates secure remote procedure calls from any browser based device to an embedded device running a Python/Docker component and possibly behind firewalls and NATs.
+
+> The buttons ("caller") and buzzers ("callees") of course can be required to be authenticated as well as authorized in production.
 
 
 ## API
