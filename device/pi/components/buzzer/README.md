@@ -1,16 +1,18 @@
 # Crossbar.io IoT Starterkit - Buzzer
 
-Tags: Python, GPIO, buzzer
+Piezo buzzer component for acoustic warning or notification.
 
 1. [Synopsis](#synopsis)
 1. [How to run](#how-to-run)
 1. [API](#api)
 
+*Tags:* Python, GPIO, buzzer
+
 ---
 
 ## Synposis
 
-This component exposes the piezo buzzer built into the Crossbar.io IoT Starterkit as a WAMP component and can then be used as a acoustic warning or notification device within a WAMP based application.
+This component exposes the piezo buzzer built into the Crossbar.io IoT Starterkit as a WAMP component which then can be used as a acoustic warning or notification device within a WAMP based application.
 
 The Crossbar.io IoT Starterkit has a built in piezo buzzer connected to GPIO 16 (Pin 36) with active high. The component is written in Python using Autobahn running on Twisted. The [Dockerfile](Dockerfile) for the component uses the default `crossbario/autobahn-python-armhf` image as base.
 
@@ -19,15 +21,20 @@ The Crossbar.io IoT Starterkit has a built in piezo buzzer connected to GPIO 16 
 
 Run the buzzer component on the Pi following [this](https://github.com/crossbario/iotcookbook/tree/master/device/pi#how-to-run) general procedure.
 
+```console
+cd iotcookbook/device/pi/component/buzzer
+make start
+```
+
 [![asciicast](https://asciinema.org/a/bhvvnuwo609gbn5b0l567pn78.png)](https://asciinema.org/a/bhvvnuwo609gbn5b0l567pn78)
 
 Then open
 
 * [https://demo.crossbar.io/iotcookbook/device/pi/recipes/buzzer?serial=41f4b2fb](https://demo.crossbar.io/iotcookbook/device/pi/recipes/buzzer?serial=41f4b2fb)
 
-in your browser - anywhere.
+in your browser.
 
-> Replace `41f4b2fb` with the serial No. of your Pi (`grep Serial /proc/cpuinfo`).
+> Replace `41f4b2fb` with the serial number of your Pi (`grep Serial /proc/cpuinfo`).
 
 You should see a Web frontend that allows you to control the piezo buzzer on the Pi remotely.
 
