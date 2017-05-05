@@ -3,15 +3,15 @@
 Seven [RGB neopixels](https://learn.adafruit.com/adafruit-neopixel-uberguide
 ) LED strip for high brightness and full color effects.
 
-1. [Synopsis](#synopsis)
+1. [Overview](#overview)
 1. [How to run](#how-to-run)
 1. [API](#api)
 
-*Tags:* Python, GPIO, colorstrip
+*Tags:* Python, GPIO, output, colorstrip
 
 ---
 
-## Synposis
+## Overview
 
 This component exposes the seven RGB neopixel LED strip built into the Crossbar.io IoT Starterkit as a WAMP component which then can be used for visual indication and effects within a WAMP based application.
 
@@ -24,7 +24,7 @@ The [Dockerfile](Dockerfile) for the component uses the default `crossbario/auto
 
 ## How to run
 
-Run the colorstrip component on the Pi following **[this procedure](https://github.com/crossbario/iotcookbook/tree/master/device/pi#how-to-run)**:
+Run the colorstrip component on the Pi following **[this procedure](https://github.com/crossbario/iotcookbook/tree/master/device/pi/components#how-to-run)**:
 
 ```console
 cd iotcookbook/device/pi/component/colorstrip

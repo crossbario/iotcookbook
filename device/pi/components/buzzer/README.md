@@ -2,24 +2,26 @@
 
 Piezo buzzer component for acoustic warning or notification.
 
-1. [Synopsis](#synopsis)
-1. [How to run](#how-to-run)
-1. [API](#api)
+1. [Overview](#overview)
+2. [How to run](#how-to-run)
+3. [API](#api)
 
-*Tags:* Python, GPIO, buzzer
+*Tags:* Python, GPIO, output, buzzer
 
 ---
 
-## Synposis
+## Overview
 
-This component exposes the piezo buzzer built into the Crossbar.io IoT Starterkit as a WAMP component which then can be used as a acoustic warning or notification device within a WAMP based application.
+This component exposes the piezo buzzer built into the Crossbar.io IoT Starterkit via a WAMP component. This can then be used as a acoustic warning or notification device within a WAMP-based application.
 
-The Crossbar.io IoT Starterkit has a built in piezo buzzer connected to GPIO 16 (Pin 36) with active high. The component is written in Python using Autobahn running on Twisted. The [Dockerfile](Dockerfile) for the component uses the default `crossbario/autobahn-python-armhf` image as base.
+The Crossbar.io IoT Starterkit has a built in piezo buzzer connected to GPIO 16 (Pin 36) with active high. (Nothing else special about this connection.)
+
+The component is written in Python using Autobahn|Python running on Twisted. The [Dockerfile](Dockerfile) for the component uses the default `crossbario/autobahn-python-armhf` image as base.
 
 
 ## How to run
 
-Run the buzzer component on the Pi following **[this procedure](https://github.com/crossbario/iotcookbook/tree/master/device/pi#how-to-run)**:
+Run the buzzer component on the Pi following **[this procedure](https://github.com/crossbario/iotcookbook/tree/master/device/pi/components#how-to-run)**:
 
 ```console
 cd iotcookbook/device/pi/component/buzzer

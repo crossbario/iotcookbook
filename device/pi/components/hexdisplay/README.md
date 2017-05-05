@@ -2,15 +2,15 @@
 
 Hex digit display, fully programmable as a WAMP component.
 
-1. [Synopsis](#synopsis)
+1. [Overview](#overview)
 1. [How to run](#how-to-run)
 1. [API](#api)
 
-*Tags:* Python, I2C, LED, display
+*Tags:* Python, I2C, LED, output, display
 
 ---
 
-## Synposis
+## Overview
 
 This component exposes the six digit hex display built into the Crossbar.io IoT Starterkit as a WAMP component which then can be used to display information locally on the device. The display has high brightness LEDs and is daylight readable.
 
@@ -21,7 +21,7 @@ The component is written in Python using Autobahn running on Twisted. The [Docke
 
 ## How to run
 
-Run the buzzer component on the Pi following **[this procedure](https://github.com/crossbario/iotcookbook/tree/master/device/pi#how-to-run)**:
+Run the hex display component on the Pi following **[this procedure](https://github.com/crossbario/iotcookbook/tree/master/device/pi#how-to-run)**:
 
 ```console
 cd iotcookbook/device/pi/component/buzzer
@@ -34,13 +34,13 @@ Here is how that looks:
 
 Then open this URL:
 
-* [https://demo.crossbar.io/iotcookbook/device/pi/recipes/buzzer?serial=41f4b2fb](https://demo.crossbar.io/iotcookbook/device/pi/recipes/buzzer?serial=41f4b2fb)
+* [https://demo.crossbar.io/iotcookbook/device/pi/recipes/buzzer?serial=41f4b2fb](https://demo.crossbar.io/iotcookbook/device/pi/recipes/hexdisplay?serial=41f4b2fb)
 
 in your browser.
 
 > Replace `41f4b2fb` with the serial number of your Pi (`grep Serial /proc/cpuinfo`).
 
-You should see a Web page with buttons to control the piezo buzzer on your Pi. Pressing a button on the Web page will issue a WAMP remote procedure call to the `beep()` procedure exposed by the buzzer component running on the Pi.
+You should see a Web page which allows you to control the hexdisplay (change color, start disco mode).
 
 This demonstrates secure remote procedure calls from any browser based device to an embedded device running a Python/Docker component and possibly behind firewalls and NATs.
 
