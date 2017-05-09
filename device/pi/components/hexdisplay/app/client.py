@@ -119,6 +119,10 @@ class HexDisplayComponent(ApplicationSession):
         msg = u'     '.join(msgs)
         yield self._display.scroll_message(msg)
 
+    def show_text(self, text):
+        yield self._display.scroll_message(text)
+
+    # show the logo of the Zollhof digital founder center in Nuremberg, Germany
     def show_logo(self, name):
         if name == u'zollhof':
             # write the ZOLLHOF logo

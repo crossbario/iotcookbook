@@ -42,6 +42,8 @@ in your browser.
 
 The control page will ask you for the serial number of your Pi. This is being put out as part of the component startup logging, or you can do `grep Serial /proc/cpuinfo` and drop any leading zeros.
 
+> Alternatively, you can construct the URL for direct access by adding '?serial=41f4b2fb' to its end, where you replace '41f4b2fb' with the serial of your Pi.
+
 You should then see a Web page with buttons to control the piezo buzzer on your Pi. Pressing a button on the Web page will issue a WAMP remote procedure call to the `beep()` procedure exposed by the buzzer component running on the Pi.
 
 This demonstrates secure remote procedure calls from any browser based device to an embedded device running a Python/Docker component and possibly behind firewalls and NATs.

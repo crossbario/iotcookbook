@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Crossbar.io IoT Cookbook - Pi/HexDisplay</title>
+
+    <head>
+        <style>
+            html {
+                margin: 0;
+                padding: 0;
+                width: 100%;
+                height: 100%;
+            }
+
+            body {
+                margin: auto;
+                padding-top: 3em;
+                width: 800px;
+                color: #444;
+                background-color: #eee;
+                font-family: sans-serif;
+                line-height: 1.6em;
+            }
+
+        </style>
+    </head>
+    <body>
+        <h1>Crossbar.io IoT Cookbook: Pi/HexDisplay Frontend</h1>
+
+        <p>
+            This is the demo frontend for the
+            <a href="https://github.com/crossbario/iotcookbook/tree/master/device/pi/recipes/colorstrip">
+            HexDisplay Recipe</a> in the Crossbar.io IoT Cookbook.
+        </p>
+
+        <h2>Status</h2>
+        <table>
+            <tr>
+                <td>Connected to URL (protocol)</td><td><b id="status_url">-</b></td>
+            </tr>
+            <tr>
+                <td>Joined as authid@realm</td><td><b id="status_realm">-</b></td>
+            </tr>
+            <tr>
+                <td>Addressing Pi with serial No.:</td><td><b id="status_serial">-</b></td>
+            </tr>
+        </table>
+
+        <h2>
+            Display device info
+        </h2>
+
+        <p>
+            Trigger the display of device information such as serial number and current IP address.
+        </p>
+
+        <button onclick="show_info()">Show Device Info</button>
+
+
+        <h2>
+           Show Zollhof logo
+        </h2>
+
+        <p>
+            Show the logo of the Zollhof digital founders center in Nuremberg, Germany. (They are using our starter kit and, amusingly, their logo fits onto the hex display!)
+        </p>
+
+        <button onclick="show_logo('zollhof')">Show Logo</button>
+
+        <h2>
+            Show your own info
+        </h2>
+
+        <p>
+            Enter any hexadecimal (0 - 9, A - F) string to be scrolled through the hexdisplay.
+        </p>
+
+        Hexadecimcal string: <input type="text" id="hexString">
+
+        <button onclick="
+            var str = document.getElementById('hexString').value;
+            show_string(str);
+        ">Show hexadecimal string</button>
+
+
+
+
+        <script>AUTOBAHN_DEBUG = false;</script>
+        <script src="https://demo.crossbar.io/shared/autobahn/autobahn.min.js"></script>
+        <script src="client.js"></script>
+   </body>
+</html>
