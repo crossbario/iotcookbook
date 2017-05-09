@@ -75,10 +75,20 @@ class HexDisplay(HT16K33):
     Total number of digits (1-8).
     """
 
+    def __init__(self, *args, **kwargs):
+        super(HT16K33, self).__init__(*args, **kwargs)
+        self._busy = False
+
+    def is_busy(self):
+        return self._busy
+
     def set_clear(self):
         """
         Clear and refresh the display.
         """
+        if self._busy:
+            raise Exception('display busy')
+
         self.clear()
         self.write_display()
 
@@ -88,6 +98,8 @@ class HexDisplay(HT16K33):
         """
         assert(pos in range(self.TOTAL_DIGITS))
         assert(type(value) in six.integer_types)
+        if self._busy:
+            raise Exception('display busy')
 
         self.buffer[pos * 2] = value & 0xFF
 
@@ -103,6 +115,8 @@ class HexDisplay(HT16K33):
         """
         assert(pos in range(self.TOTAL_DIGITS))
         assert(type(char) == six.text_type)
+        if self._busy:
+            raise Exception('display busy')
 
         char = char.strip().upper()
         bitmask = DIGIT_VALUES.get(char, 0x00)
@@ -122,6 +136,8 @@ class HexDisplay(HT16K33):
         """
         assert(pos in range(self.TOTAL_DIGITS))
         assert(type(enable) == bool)
+        if self._busy:
+            raise Exception('display busy')
 
         if enable:
             self.buffer[pos * 2] |= (1 << 7)
@@ -133,6 +149,9 @@ class HexDisplay(HT16K33):
         Set a message text on the display and refresh the display.
         """
         assert(type(message) == six.text_type)
+        if self._busy:
+            raise Exception('display busy')
+
         i = 0
         for c in message[:self.TOTAL_DIGITS]:
             self.set_digit(i, c)
@@ -141,11 +160,20 @@ class HexDisplay(HT16K33):
 
     @inlineCallbacks
     def scroll_message(self, message, delay=150):
+        if self._busy:
+            raise Exception('display busy')
         assert(type(message) == six.text_type)
-        _message = message + u' ' * self.TOTAL_DIGITS
-        for i in range(len(message) + 1):
-            self.set_message(_message[i:])
-            yield sleep(delay / 1000.)
+
+        self._busy = True
+        try:
+            _message = message + u' ' * self.TOTAL_DIGITS
+            for i in range(len(message) + 1):
+                self.set_message(_message[i:])
+                yield sleep(delay / 1000.)
+        except:
+            raise
+        finally:
+            self._busy = False
 
 
 if __name__ == '__main__':
