@@ -32,15 +32,17 @@ Here is how that looks:
 
 [![asciicast](https://asciinema.org/a/bhvvnuwo609gbn5b0l567pn78.png)](https://asciinema.org/a/bhvvnuwo609gbn5b0l567pn78)
 
+(and it may take a while on first start as the necessary Docker image is downloaded).
+
 Then open this URL:
 
-* [https://demo.crossbar.io/iotcookbook/device/pi/recipes/buzzer?serial=41f4b2fb](https://demo.crossbar.io/iotcookbook/device/pi/recipes/buzzer?serial=41f4b2fb)
+* [https://demo.crossbar.io/iotcookbook/device/pi/recipes/buzzer](https://demo.crossbar.io/iotcookbook/device/pi/recipes/buzzer)
 
 in your browser.
 
-> Replace `41f4b2fb` with the serial number of your Pi (`grep Serial /proc/cpuinfo`).
+The control page will ask you for the serial number of your Pi. This is being put out as part of the component startup logging, or you can do `grep Serial /proc/cpuinfo` and drop any leading zeros.
 
-You should see a Web page with buttons to control the piezo buzzer on your Pi. Pressing a button on the Web page will issue a WAMP remote procedure call to the `beep()` procedure exposed by the buzzer component running on the Pi.
+You should then see a Web page with buttons to control the piezo buzzer on your Pi. Pressing a button on the Web page will issue a WAMP remote procedure call to the `beep()` procedure exposed by the buzzer component running on the Pi.
 
 This demonstrates secure remote procedure calls from any browser based device to an embedded device running a Python/Docker component and possibly behind firewalls and NATs.
 

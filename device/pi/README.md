@@ -3,6 +3,26 @@
 This part of the IoT Cookbook provides information, howtos and [components](components) for the Raspberry Pi and the [Crossbar.io IoT Starterkit](http://crossbario.com/lab/crossbar-iot-starterkit/).
 
 
+## Installing Docker
+
+The components we provide are run inside Docker containers.
+
+To install Docker, do
+
+```console
+curl -sSL https://get.docker.com | sh
+```
+
+You also need to be able to run Docker without superuser rights (`sudo`) which can be done like so
+
+```console
+sudo usermod -aG docker pi
+```
+
+(remember to log back in & out or reboot afterwards for this to take effect).
+
+
+
 ## Pi Setup: Wi-Fi
 
 You'll often run your Pi headless (controlling it via SSH rather than mouse, keyboard and a monitor).
@@ -76,11 +96,3 @@ Eg given above, this Pi (MAC `F4:F2:6D:14:1B:56`) will join one of the Wifi netw
 * office: 192.168.1.142
 * mobile: 192.168.43.105
 * home: 192.168.55.104
-
-
-## Pi Setup: Keyboard
-
-Raspbian has a British keyboard as the default - which can be confusing outside of Great Britain.
-
-
---> Why is this a problem when I'm connected via SSH? My keyboard is whatever it is, an this gets sent to the Pi. I don't care a bit about the keyboard language there.

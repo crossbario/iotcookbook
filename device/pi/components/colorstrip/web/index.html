@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Crossbar.io IoT Cookbook - Pi/Colorstrip</title>
+
+    <head>
+        <style>
+            html {
+                margin: 0;
+                padding: 0;
+                width: 100%;
+                height: 100%;
+            }
+
+            body {
+                margin: auto;
+                padding-top: 3em;
+                width: 800px;
+                color: #444;
+                background-color: #eee;
+                font-family: sans-serif;
+                line-height: 1.6em;
+            }
+
+        </style>
+    </head>
+    <body>
+        <h1>Crossbar.io IoT Cookbook: Pi/Colorstrip Frontend</h1>
+
+        <p>
+            This is the demo frontend for the
+            <a href="https://github.com/crossbario/iotcookbook/tree/master/device/pi/recipes/colorstrip">
+            Colorstrip Recipe</a> in the Crossbar.io IoT Cookbook.
+        </p>
+
+        <h2>Status</h2>
+        <table>
+            <tr>
+                <td>Connected to URL (protocol)</td><td><b id="status_url">-</b></td>
+            </tr>
+            <tr>
+                <td>Joined as authid@realm</td><td><b id="status_realm">-</b></td>
+            </tr>
+            <tr>
+                <td>Addressing Pi with serial No.:</td><td><b id="status_serial">-</b></td>
+            </tr>
+        </table>
+
+        <h2>
+           Light Effects Control
+        </h2>
+
+        <button onclick="trigger('rainbow')">Trigger <br> Rainbow </button>
+        <button onclick="trigger('flash')">Trigger <br> Flash </button>
+        <button onclick="trigger('color_wipe')">Trigger <br> Color Wipe </button>
+        <button onclick="trigger('theater_chase')">Trigger <br> Theater Chase </button>
+        <button onclick="trigger('lightshow')">Trigger <br> Lightshow</button>
+
+
+
+        <h2>
+            Control Light Color
+        </h2>
+
+        Red: <input type="text" value="255" id="red">
+        Green: <input type="text" value="255" id="green">
+        Blue: <input type="text" value="0" id="blue">
+
+        <button onclick="setColor()">Set Color</button>
+
+        <script>AUTOBAHN_DEBUG = false;</script>
+        <script src="https://demo.crossbar.io/shared/autobahn/autobahn.min.js"></script>
+        <script src="client.js"></script>
+   </body>
+</html>

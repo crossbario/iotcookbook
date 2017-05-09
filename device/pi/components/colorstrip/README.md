@@ -15,7 +15,7 @@ Seven [RGB neopixels](https://learn.adafruit.com/adafruit-neopixel-uberguide
 
 This component exposes the seven RGB neopixel LED strip built into the Crossbar.io IoT Starterkit as a WAMP component which then can be used for visual indication and effects within a WAMP based application.
 
-The Crossbar.io IoT Starterkit has a built in seven RGB neopixel LED strip that is connected via one of the PWM capable GPIOs of the Pi.
+The seven RGB neopixel LED strip is connected via one of the PWM capable GPIOs of the Pi.
 
 The component is written in Python using Autobahn running on Twisted. To program the LED strip, the component uses the [rpi_ws281x library](https://github.com/jgarff/rpi_ws281x).
 
@@ -31,7 +31,23 @@ cd iotcookbook/device/pi/component/colorstrip
 make start
 ```
 
-You should see a couple of visual patterns and animations on the neopixels.
+You should see a couple of visual patterns and animations on the neopixels, with the pixels remaining lit up at the end.
+
+Then open this URL:
+
+* [https://demo.crossbar.io/iotcookbook/device/pi/recipes/colorstrip](https://demo.crossbar.io/iotcookbook/device/pi/recipes/colorstrip)
+
+in your browser.
+
+The control page will ask you for the serial number of your Pi. This is being put out as part of the component startup logging, or you can do `grep Serial /proc/cpuinfo` and drop any leading zeros.
+
+> Alternatively, you can construct the URL for direct access by adding '?serial=41f4b2fb' to its end, where you replace '41f4b2fb' with the serial of your Pi.
+
+You should then see a Web page with some buttons for triggering light effects, and some input boxes and a button for setting the colorstrip to a color of your choosing.
+
+This demonstrates secure remote procedure calls from any browser based device to an embedded device running a Python/Docker component and possibly behind firewalls and NATs.
+
+> You can, of course, require authentication for the frontend in production.
 
 
 ## API
