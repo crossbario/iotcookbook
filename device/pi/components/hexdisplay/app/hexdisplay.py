@@ -76,7 +76,7 @@ class HexDisplay(HT16K33):
     """
 
     def __init__(self, address):
-        super(HT16K33, self).__init__(address)
+        HT16K33.__init__(self, address)
         self._busy = False
 
     def is_busy(self):
