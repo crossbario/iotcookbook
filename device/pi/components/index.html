@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Crossbar.io IoT Starterkit</title>
+
+    <head>
+        <style>
+            html {
+                margin: 0;
+                padding: 0;
+                width: 100%;
+                height: 100%;
+            }
+
+            body {
+                margin: auto;
+                padding-top: 3em;
+                width: 800px;
+                color: #444;
+                background-color: #eee;
+                font-family: sans-serif;
+                line-height: 1.6em;
+            }
+
+        </style>
+    </head>
+    <body>
+        <h1>Crossbar.io IoT Starterkit</h1>
+
+        <ul>
+            <li><a id="link_buzzer" href="" target="_blank">Buzzer</a></li>
+            <li><a id="link_colorstrip" href="" target="_blank">Colorstrip</a></li>
+            <li><a id="link_hexdisplay" href="" target="_blank">Hexdisplay</a></li>
+        </ul>
+
+        <script>
+            var params = new URLSearchParams(document.location.search);
+            var serial = params.get('serial');
+            if (!serial) {
+                var new_serial = prompt("Please enter serial No. of your Pi, eg 41f4b2fb");
+                window.location.replace(window.location.pathname + '?serial=' + new_serial);
+            } else {
+                // https://demo.crossbar.io/starterkit/colorstrip/web/index.html?serial=5b0966b4
+
+                var prefix = "https://demo.crossbar.io/starterkit/";
+
+                var link_buzzer = document.getElementById("link_buzzer");
+                var link_colorstrip = document.getElementById("link_colorstrip");
+                var link_hexdisplay = document.getElementById("link_hexdisplay");
+
+                link_buzzer.href = prefix + "buzzer/web/index.html?serial=" + serial;
+                link_colorstrip.href = prefix + "colorstrip/web/index.html?serial=" + serial;
+                link_hexdisplay.href = prefix + "hexdisplay/web/index.html?serial=" + serial;
+            }
+        </script>
+   </body>
+</html>

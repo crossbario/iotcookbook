@@ -75,8 +75,8 @@ class HexDisplay(HT16K33):
     Total number of digits (1-8).
     """
 
-    def __init__(self, *args, **kwargs):
-        super(HT16K33, self).__init__(*args, **kwargs)
+    def __init__(self, address):
+        super(HT16K33, self).__init__(address)
         self._busy = False
 
     def is_busy(self):
