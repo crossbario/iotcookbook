@@ -75,7 +75,7 @@ function show_info() {
 }
 
 function show_logo(logo) {
-   session.call(prefix + "show_logo", logo).then(
+   session.call(prefix + "show_logo", [logo]).then(
       function(res) {
          console.log("calling 'show_logo' successfull!");
       },
@@ -85,13 +85,13 @@ function show_logo(logo) {
    )
 }
 
-function show_string(str) {
-   session.call(prefix + "show_string", str).then(
+function scroll_message(str) {
+   session.call(prefix + "scroll_message", [str]).then(
       function(res) {
-         console.log("calling 'show_string', str successfull!");
+         console.log("calling 'scroll_message', str successfull!");
       },
       function(err) {
-         console.log("calling 'show_string', str resulted in error:", err)
+         console.log("calling 'scroll_message', str resulted in error:", err)
       }
    )
 }
