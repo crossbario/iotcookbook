@@ -55,15 +55,19 @@ class HexDisplayComponent(ApplicationSession):
         self._display.set_clear()
         self.set_brightness(cfg[u'brightness'])
 
-        # expose some procedures
-        for proc, uri in [(self.start_loop, u'start_loop'.format(self._prefix)),
-                          (self.stop_loop, u'stop_loop'.format(self._prefix)),
-                          (self.show_info, u'show_info'.format(self._prefix)),
-                          (self.show_logo, u'show_logo'.format(self._prefix)),
-                          (self.set_brightness, u'set_brightness'.format(self._prefix)),
-                          (self._display.scroll_message, u'scroll_message'.format(self._prefix)),
-                          (self._display.set_message, u'set_message'.format(self._prefix))]:
-            yield self.register(proc, uri)
+        # register procedures
+        for proc in [
+            (self.start_loop, u'start_loop'),
+            (self.stop_loop, u'stop_loop'),
+            (self.show_info, u'show_info'),
+            (self.show_logo, u'show_logo'),
+            (self.set_brightness, u'set_brightness'),
+            (self._display.scroll_message, u'scroll_message'),
+            (self._display.set_message, u'set_message')
+        ]:
+            uri = u'{}.{}'.format(self._prefix, proc[1])
+            yield self.register(proc[0], uri)
+            self.log.info('registered procedure {uri}', uri=uri)
 
         self.log.info("HexDisplayComponent ready!")
 
