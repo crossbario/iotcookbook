@@ -62,6 +62,7 @@ class HexDisplayComponent(ApplicationSession):
             (self.show_info, u'show_info'),
             (self.show_logo, u'show_logo'),
             (self.set_brightness, u'set_brightness'),
+            (self._display.is_scrolling, u'is_scrolling'),
             (self._display.scroll_message, u'scroll_message'),
             (self._display.set_message, u'set_message')
         ]:
@@ -86,7 +87,7 @@ class HexDisplayComponent(ApplicationSession):
 
         @inlineCallbacks
         def loop():
-            if not self._display.is_busy:
+            if not self._display.is_scrolling():
                 yield self.show_info()
                 if logo:
                     show_logo(logo)

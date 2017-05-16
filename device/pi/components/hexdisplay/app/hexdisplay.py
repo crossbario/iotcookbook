@@ -77,18 +77,15 @@ class HexDisplay(HT16K33):
 
     def __init__(self, address):
         HT16K33.__init__(self, address)
-        self._busy = False
+        self._is_scrolling = False
 
-    def is_busy(self):
-        return self._busy
+    def is_scrolling(self):
+        return self._is_scrolling
 
     def set_clear(self):
         """
         Clear and refresh the display.
         """
-        if self._busy:
-            raise Exception('display busy')
-
         self.clear()
         self.write_display()
 
@@ -98,9 +95,6 @@ class HexDisplay(HT16K33):
         """
         assert(pos in range(self.TOTAL_DIGITS))
         assert(type(value) in six.integer_types)
-        if self._busy:
-            raise Exception('display busy')
-
         self.buffer[pos * 2] = value & 0xFF
 
     def set_digit(self, pos, char, decimal=False):
@@ -115,9 +109,6 @@ class HexDisplay(HT16K33):
         """
         assert(pos in range(self.TOTAL_DIGITS))
         assert(type(char) == six.text_type)
-        if self._busy:
-            raise Exception('display busy')
-
         char = char.strip().upper()
         bitmask = DIGIT_VALUES.get(char, 0x00)
         self.buffer[pos * 2] = bitmask & 0xFF
@@ -136,8 +127,6 @@ class HexDisplay(HT16K33):
         """
         assert(pos in range(self.TOTAL_DIGITS))
         assert(type(enable) == bool)
-        if self._busy:
-            raise Exception('display busy')
 
         if enable:
             self.buffer[pos * 2] |= (1 << 7)
@@ -149,8 +138,8 @@ class HexDisplay(HT16K33):
         Set a message text on the display and refresh the display.
         """
         assert(type(message) == six.text_type)
-        if self._busy:
-            raise Exception('display busy')
+        if self._is_scrolling:
+            raise Exception('display busy with scrolling text')
         self._set_message(message)
 
     def _set_message(self, message):
@@ -162,21 +151,20 @@ class HexDisplay(HT16K33):
 
     @inlineCallbacks
     def scroll_message(self, message, delay=150):
-        if self._busy:
-            raise Exception('display busy')
+        if self._is_scrolling:
+            raise Exception('display busy with scrolling text')
         assert(type(message) == six.text_type)
 
-        self._busy = True
+        self._is_scrolling = True
         try:
             _message = message + u' ' * self.TOTAL_DIGITS
             for i in range(len(message) + 1):
                 self._set_message(_message[i:])
                 yield sleep(delay / 1000.)
         except:
-            self._busy = False
             raise
-
-        self._busy = False
+        finally:
+            self._is_scrolling = False
 
 
 if __name__ == '__main__':
