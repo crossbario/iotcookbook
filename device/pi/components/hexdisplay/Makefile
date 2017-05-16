@@ -14,8 +14,10 @@ start: build
 		-e CBREALM='crossbardemo' \
 		cookbook-hexdisplay
 
-bash: build
-	docker run -it --rm \
+autostart: build
+	docker run --detach \
+		--restart=always \
+		--name hexdisplay \
 		--device /dev/ttyAMA0 \
 		--device /dev/mem \
 		--device /dev/gpiomem \
@@ -23,5 +25,4 @@ bash: build
 		--net=host \
 		-e CBURL='wss://demo.crossbar.io/ws' \
 		-e CBREALM='crossbardemo' \
-		cookbook-hexdisplay \
-		/bin/bash
+		cookbook-hexdisplay
