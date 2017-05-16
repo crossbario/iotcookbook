@@ -30,7 +30,7 @@ def get_serial():
             line = line.strip()
             if line.startswith('Serial'):
                 _, serial = line.split(':')
-                return int(serial.strip(), 16)
+                return serial.strip().lstrip('0')
 
 
 class HexDisplayComponent(ApplicationSession):
@@ -73,7 +73,7 @@ class HexDisplayComponent(ApplicationSession):
 
         # start endless loop .. until stopped
         #self.start_loop(logo=u'zollhof')
-        self.show_logo()
+        self.show_logo(u'zollhof')
 
     def set_brightness(self, brightness):
         if type(brightness) != float or brightness < 0 or brightness > 1:

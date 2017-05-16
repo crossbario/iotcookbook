@@ -16,7 +16,7 @@ if (!serial) {
 }
 
 // the URI prefix the buzzer component on the Pi is using
-var prefix = 'io.crossbar.demo.iotstarterkit.' + serial + '.colorstrip.';
+var prefix = 'io.crossbar.demo.iotstarterkit.' + serial + '.hexdisplay.';
 
 // the WAMP session
 var session;
