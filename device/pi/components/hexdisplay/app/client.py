@@ -104,7 +104,7 @@ class HexDisplayComponent(ApplicationSession):
         msgs = []
 
         # Pi serial number
-        msg = u'serial {:0>6d}'.format(self._serial)
+        msg = u'serial {}'.format(self._serial)
         self.log.info(msg)
         msgs.append(msg)
 
