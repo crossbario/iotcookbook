@@ -72,7 +72,8 @@ class HexDisplayComponent(ApplicationSession):
         self.log.info("HexDisplayComponent ready!")
 
         # start endless loop .. until stopped
-        self.start_loop(logo=u'zollhof')
+        #self.start_loop(logo=u'zollhof')
+        self.show_logo()
 
     def set_brightness(self, brightness):
         if type(brightness) != float or brightness < 0 or brightness > 1:
@@ -85,7 +86,7 @@ class HexDisplayComponent(ApplicationSession):
 
         @inlineCallbacks
         def loop():
-            if not self._display.is_busy():
+            if not self._display.is_busy:
                 yield self.show_info()
                 if logo:
                     show_logo(logo)
