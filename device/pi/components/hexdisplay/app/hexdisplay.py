@@ -151,7 +151,9 @@ class HexDisplay(HT16K33):
         assert(type(message) == six.text_type)
         if self._busy:
             raise Exception('display busy')
+        self._set_message(message)
 
+    def _set_message(self, message):
         i = 0
         for c in message[:self.TOTAL_DIGITS]:
             self.set_digit(i, c)
@@ -168,12 +170,13 @@ class HexDisplay(HT16K33):
         try:
             _message = message + u' ' * self.TOTAL_DIGITS
             for i in range(len(message) + 1):
-                self.set_message(_message[i:])
+                self._set_message(_message[i:])
                 yield sleep(delay / 1000.)
         except:
-            raise
-        finally:
             self._busy = False
+            raise
+
+        self._busy = False
 
 
 if __name__ == '__main__':
