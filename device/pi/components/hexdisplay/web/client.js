@@ -97,7 +97,7 @@ function scroll_message(str) {
 }
 
 function set_clear() {
-   session.call(prefix + "set_clear", [str]).then(
+   session.call(prefix + "set_clear").then(
       function(res) {
          console.log("calling 'set_clear' successfull!");
       },
