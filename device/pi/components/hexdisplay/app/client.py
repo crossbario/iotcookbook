@@ -90,8 +90,8 @@ class HexDisplayComponent(ApplicationSession):
                 if logo:
                     show_logo(logo)
 
-        self._loop = LoopingCall(loop, 20)
-        self._loop.start()
+        self._loop = LoopingCall(loop)
+        self._loop.start(20)
 
     def stop_loop(self):
         if self._loop:
@@ -123,6 +123,7 @@ class HexDisplayComponent(ApplicationSession):
         msg = u'     '.join(msgs)
         yield self._display.scroll_message(msg)
 
+    @inlineCallbacks
     def show_text(self, text):
         yield self._display.scroll_message(text)
 
