@@ -64,7 +64,8 @@ class HexDisplayComponent(ApplicationSession):
             (self.set_brightness, u'set_brightness'),
             (self._display.is_scrolling, u'is_scrolling'),
             (self._display.scroll_message, u'scroll_message'),
-            (self._display.set_message, u'set_message')
+            (self._display.set_message, u'set_message'),
+            (self._display.set_clear, u'set_clear'),
         ]:
             uri = u'{}.{}'.format(self._prefix, proc[1])
             yield self.register(proc[0], uri)
@@ -131,6 +132,9 @@ class HexDisplayComponent(ApplicationSession):
 
     # show the logo of the Zollhof digital founder center in Nuremberg, Germany
     def show_logo(self, name):
+        if self._display.is_scrolling():
+            raise Exception('display busy with scrolling text')
+
         if name == u'zollhof':
             # write the ZOLLHOF logo
             self._display.set_raw_digit(0, 0b0001001)
@@ -181,7 +185,7 @@ if __name__ == '__main__':
         u'i2c_address': 0x77,
 
         # brightness of display (0-1)
-        u'brightness': 0.6,
+        u'brightness': 1.,
     }
 
     # create and start app runner for our app component ..

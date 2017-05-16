@@ -95,3 +95,14 @@ function scroll_message(str) {
       }
    )
 }
+
+function set_clear() {
+   session.call(prefix + "set_clear", [str]).then(
+      function(res) {
+         console.log("calling 'set_clear' successfull!");
+      },
+      function(err) {
+         console.log("calling 'set_clear' resulted in error:", err)
+      }
+   )
+}
