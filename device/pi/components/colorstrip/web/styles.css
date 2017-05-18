@@ -1,0 +1,126 @@
+* {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+html {
+   min-height: 100%;
+   width: 100%;
+   font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+
+body {
+  padding: 0;
+  margin: 0;
+  border: none;
+  height: 100%;
+  position: relative;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-color: #fafafa;
+  font-family: sans-serif;
+  font-size: 14px;
+}
+
+
+a {
+   color: #555;
+}
+
+a:hover {
+   color: #f60;
+   color: #D0B800;
+}
+
+a > img {
+   border-style: none;
+}
+
+.notextselect {
+   -webkit-touch-callout: none;
+   -webkit-user-select: none;
+   -khtml-user-select: none;
+   -moz-user-select: none;
+   -ms-user-select: none;
+   user-select: none;
+
+   cursor: default;
+}
+
+button {
+  background-color: #D4D0C8;
+  border: 1px solid rgb(196, 191, 181);
+  padding: 0.8rem 1.7rem;
+  font-size: 28px;
+  font-weight: normal;
+  text-shadow: 0 0 4px rgba(0, 0, 0, 0.3), -1px 0 1px rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 8px 1px rgba(0, 0, 0, 0.3);
+
+  margin: 1em;
+}
+
+button:hover {
+  background-color: rgb(196, 188, 173);
+  box-shadow: 0 0 8px 2px rgba(0, 0, 0, 0.4);
+}
+
+.colorLabel {
+   width: 7em;
+   display: inline-block;
+}
+
+#serial.hidden {
+      /*visibility: hidden;*/
+      display: none;
+ }
+
+#control.inactive {
+      opacity: 0.5;
+      pointer-events: none;
+ }
+
+input[type=text] {
+   width: auto;
+   font-size: 120%;
+   /*margin: 0 2em;*/
+}
+
+nav {
+   height: 74px;
+   background-color: #333;
+}
+
+.nav-wrapper .brand-logo {
+   top: 7px;
+   left: 19px;
+   -webkit-transfrom: initial;
+   transform: translateX(0%);
+   /* IE 11 does not do 'initial'*/
+}
+
+.nav-wrapper span {
+   font-size: 38px;
+   color: #A2A2A2;
+   position: absolute;
+   right: 0;
+   top: 8px;
+   font-weight: bold;
+}
+
+@media (max-width: 700px) {
+   .brand-logo img.notOnNarrowScreens {
+     display: none;
+   }
+}
+
+#demo_body h1 {
+   font-size: 2.5rem;
+}
+
+@media (max-width: 900px) {
+   #demo_body {
+     width: 95%;
+   }
+}
