@@ -38,7 +38,7 @@ function connect() {
    }
 
    // For testing only
-   wsuri = "wss://demo.crossbar.io/ws"; 
+   wsuri = "wss://demo.crossbar.io/ws";
 
    // the WAMP realm we join
    var realm = "crossbardemo";
@@ -79,7 +79,7 @@ function connect() {
 
        function on_beep_ended () {
            console.log('beeping ended');
-           buzzer.style.backgroundColor = '#999';
+           buzzer.style.backgroundColor = '#333';
        }
 
        session.subscribe(prefix + 'on_beep_started', on_beep_started);

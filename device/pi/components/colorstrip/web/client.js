@@ -48,6 +48,7 @@ function connect() {
 
    // For testing only
    wsuri = "wss://demo.crossbar.io/ws";
+
    // the WAMP realm we join
    var realm = "crossbardemo";
 

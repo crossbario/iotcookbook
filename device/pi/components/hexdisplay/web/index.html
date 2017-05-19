@@ -17,83 +17,109 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Crossbar.io IoT Cookbook: Pi/HexDisplay Frontend</h1>
 
-    <p>
-        This is the demo frontend for the
-        <a href="https://github.com/crossbario/iotcookbook/tree/master/device/pi/recipes/colorstrip">
-        HexDisplay Recipe</a> in the Crossbar.io IoT Cookbook.
-    </p>
+    <nav>
+        <div class="nav-wrapper container">
+            <a href="/" class="brand-logo">
+                <img src="crossbar_icon_inverted.svg" alt="crossbar logo inverted" width="60" height="60">
+                <img src="crossbar_iot_cookbook.svg" alt="crossbar logo inverted" class="notOnNarrowScreens" width="248" height="60">
+            </a>
+            <span>
+                HexDisplay
+            </span>
+       </div>
+    </nav>
 
-    <div id="serial" class="hidden">
-        Enter the serial number of the Pi you want to control: <input type="text" id="serialNumber">
-        <br>
-        <div class="center">
+    <div id="demo_body" class="container">
 
-            <button onclick="serialEntered()">Connect</button>
+        <h1>Crossbar.io IoT Cookbook: Pi/HexDisplay Frontend</h1>
+
+        <p>
+            This is the demo frontend for the
+            <a href="https://github.com/crossbario/iotcookbook/tree/master/device/pi/recipes/colorstrip">
+            HexDisplay Recipe</a> in the Crossbar.io IoT Cookbook.
+        </p>
+
+        <div id="serial" class="hidden">
+            Enter the serial number of the Pi you want to control: <input type="text" id="serialNumber">
+            <br>
+            <div class="center">
+
+                <button onclick="serialEntered()">Connect</button>
+            </div>
         </div>
+
+        <h2>Status</h2>
+        <table>
+            <tr>
+                <td>Connected to URL (protocol)</td><td><b id="status_url">-</b></td>
+            </tr>
+            <tr>
+                <td>Joined as authid@realm</td><td><b id="status_realm">-</b></td>
+            </tr>
+            <tr>
+                <td>Addressing Pi with serial No.:</td><td><b id="status_serial">-</b></td>
+            </tr>
+        </table>
+
+        <h2>
+            Display device info
+        </h2>
+
+        <p>
+            Trigger the display of device information such as serial number and current IP address.
+        </p>
+
+        <p class="center">
+            <button onclick="show_info()">Show Device Info</button>
+        </p>
+
+
+
+        <h2>
+           Show Zollhof logo
+        </h2>
+
+        <p>
+            Show the logo of the Zollhof digital founders center in Nuremberg, Germany. (They are using our starter kit and, amusingly, their logo fits onto the hex display!)
+        </p>
+
+        <p class="center">
+            <button onclick="show_logo('zollhof')">Show Logo</button>
+        </p>
+
+        <h2>
+            Show your own info
+        </h2>
+
+        <p>
+            Enter any hexadecimal (0 - 9, A - F) string to be scrolled through the hexdisplay.
+        </p>
+
+        Hexadecimcal string: <input type="text" id="hexString" value="-- 0123456789ABCDEF --">
+
+        <p class="center">
+            <button onclick="
+            var str = document.getElementById('hexString').value;
+            scroll_message(str);
+            ">Show hexadecimal string</button>
+        </p>
+
+
+        <h2>
+           Clear the display
+        </h2>
+
+        <p>
+            Clear the display.
+        </p>
+
+        <p class="center">
+            <button onclick="set_clear()">Clear</button>
+        </p>
+
+
     </div>
-
-    <h2>Status</h2>
-    <table>
-        <tr>
-            <td>Connected to URL (protocol)</td><td><b id="status_url">-</b></td>
-        </tr>
-        <tr>
-            <td>Joined as authid@realm</td><td><b id="status_realm">-</b></td>
-        </tr>
-        <tr>
-            <td>Addressing Pi with serial No.:</td><td><b id="status_serial">-</b></td>
-        </tr>
-    </table>
-
-    <h2>
-        Display device info
-    </h2>
-
-    <p>
-        Trigger the display of device information such as serial number and current IP address.
-    </p>
-
-    <button onclick="show_info()">Show Device Info</button>
-
-
-    <h2>
-       Show Zollhof logo
-    </h2>
-
-    <p>
-        Show the logo of the Zollhof digital founders center in Nuremberg, Germany. (They are using our starter kit and, amusingly, their logo fits onto the hex display!)
-    </p>
-
-    <button onclick="show_logo('zollhof')">Show Logo</button>
-
-    <h2>
-        Show your own info
-    </h2>
-
-    <p>
-        Enter any hexadecimal (0 - 9, A - F) string to be scrolled through the hexdisplay.
-    </p>
-
-    Hexadecimcal string: <input type="text" id="hexString" value="-- 0123456789ABCDEF --">
-
-    <button onclick="
-        var str = document.getElementById('hexString').value;
-        scroll_message(str);
-    ">Show hexadecimal string</button>
-
-
-    <h2>
-       Clear the display
-    </h2>
-
-    <p>
-        Clear the display.
-    </p>
-
-    <button onclick="set_clear()">Clear</button>
-
 
     <script>AUTOBAHN_DEBUG = false;</script>
     <script src="https://demo.crossbar.io/shared/autobahn/autobahn.min.js"></script>
