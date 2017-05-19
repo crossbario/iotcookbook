@@ -2,24 +2,26 @@
 
 Piezo buzzer component for acoustic warning or notification.
 
-1. [Synopsis](#synopsis)
-1. [How to run](#how-to-run)
-1. [API](#api)
+1. [Overview](#overview)
+2. [How to run](#how-to-run)
+3. [API](#api)
 
-*Tags:* Python, GPIO, buzzer
+*Tags:* Python, GPIO, output, buzzer
 
 ---
 
-## Synposis
+## Overview
 
-This component exposes the piezo buzzer built into the Crossbar.io IoT Starterkit as a WAMP component which then can be used as a acoustic warning or notification device within a WAMP based application.
+This component exposes the piezo buzzer built into the Crossbar.io IoT Starterkit via a WAMP component. This can then be used as a acoustic warning or notification device within a WAMP-based application.
 
-The Crossbar.io IoT Starterkit has a built in piezo buzzer connected to GPIO 16 (Pin 36) with active high. The component is written in Python using Autobahn running on Twisted. The [Dockerfile](Dockerfile) for the component uses the default `crossbario/autobahn-python-armhf` image as base.
+The Crossbar.io IoT Starterkit has a built in piezo buzzer connected to GPIO 16 (Pin 36) with active high. (Nothing else special about this connection.)
+
+The component is written in Python using Autobahn|Python running on Twisted. The [Dockerfile](Dockerfile) for the component uses the default `crossbario/autobahn-python-armhf` image as base.
 
 
 ## How to run
 
-Run the buzzer component on the Pi following **[this procedure](https://github.com/crossbario/iotcookbook/tree/master/device/pi#how-to-run)**:
+Run the buzzer component on the Pi following **[this procedure](https://github.com/crossbario/iotcookbook/tree/master/device/pi/components#how-to-run)**:
 
 ```console
 cd iotcookbook/device/pi/component/buzzer
@@ -30,15 +32,19 @@ Here is how that looks:
 
 [![asciicast](https://asciinema.org/a/bhvvnuwo609gbn5b0l567pn78.png)](https://asciinema.org/a/bhvvnuwo609gbn5b0l567pn78)
 
+(and it may take a while on first start as the necessary Docker image is downloaded).
+
 Then open this URL:
 
-* [https://demo.crossbar.io/iotcookbook/device/pi/recipes/buzzer?serial=41f4b2fb](https://demo.crossbar.io/iotcookbook/device/pi/recipes/buzzer?serial=41f4b2fb)
+* [https://demo.crossbar.io/iotcookbook/device/pi/recipes/buzzer](https://demo.crossbar.io/iotcookbook/device/pi/recipes/buzzer)
 
 in your browser.
 
-> Replace `41f4b2fb` with the serial number of your Pi (`grep Serial /proc/cpuinfo`).
+The control page will ask you for the serial number of your Pi. This is being put out as part of the component startup logging, or you can do `grep Serial /proc/cpuinfo` and drop any leading zeros.
 
-You should see a Web page with buttons to control the piezo buzzer on your Pi. Pressing a button on the Web page will issue a WAMP remote procedure call to the `beep()` procedure exposed by the buzzer component running on the Pi.
+> Alternatively, you can construct the URL for direct access by adding '?serial=41f4b2fb' to its end, where you replace '41f4b2fb' with the serial of your Pi.
+
+You should then see a Web page with buttons to control the piezo buzzer on your Pi. Pressing a button on the Web page will issue a WAMP remote procedure call to the `beep()` procedure exposed by the buzzer component running on the Pi.
 
 This demonstrates secure remote procedure calls from any browser based device to an embedded device running a Python/Docker component and possibly behind firewalls and NATs.
 

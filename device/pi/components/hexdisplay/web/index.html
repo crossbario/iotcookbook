@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-    <title>Crossbar.io IoT Cookbook - Pi/Buzzer</title>
+    <title>Crossbar.io IoT Cookbook - Pi/HexDisplay</title>
 
     <!--Import Google Icon Font-->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -15,18 +15,9 @@
 
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
-
-    <style>
-        #buzzer {
-            display: inline-block;
-            width: 2em;
-            height: 2em;
-            background-color: #333;
-        }
-    </style>
-
 </head>
 <body>
+
     <nav>
         <div class="nav-wrapper container">
             <a href="/" class="brand-logo">
@@ -34,27 +25,26 @@
                 <img src="crossbar_iot_cookbook.svg" alt="crossbar logo inverted" class="notOnNarrowScreens" width="248" height="60">
             </a>
             <span>
-                Buzzer
+                HexDisplay
             </span>
        </div>
     </nav>
 
     <div id="demo_body" class="container">
 
-        <h1>
-            Crossbar.io IoT Cookbook: Pi/Buzzer Frontend
-        </h1>
+        <h1>Crossbar.io IoT Cookbook: Pi/HexDisplay Frontend</h1>
 
         <p>
             This is the demo frontend for the
-            <a href="https://github.com/crossbario/iotcookbook/tree/master/device/pi/recipes/buzzer">
-            Buzzer Recipe</a> in the Crossbar.io IoT Cookbook.
+            <a href="https://github.com/crossbario/iotcookbook/tree/master/device/pi/recipes/colorstrip">
+            HexDisplay Recipe</a> in the Crossbar.io IoT Cookbook.
         </p>
 
         <div id="serial" class="hidden">
             Enter the serial number of the Pi you want to control: <input type="text" id="serialNumber">
             <br>
             <div class="center">
+
                 <button onclick="serialEntered()">Connect</button>
             </div>
         </div>
@@ -70,28 +60,64 @@
             <tr>
                 <td>Addressing Pi with serial No.:</td><td><b id="status_serial">-</b></td>
             </tr>
-            <tr>
-                <td>Pi component started (UTC)</td><td><b id="status_started">-</b></td>
-            </tr>
         </table>
 
-        <h2>Buzzer Trigger</h2>
+        <h2>
+            Display device info
+        </h2>
+
         <p>
-            Click one of the buttons to start a beeping sequence on the piezo buzzer connected to the Pi.
-        </p>
-        <p class="center">
-            <button onclick="beep();">Beep 1x</button>
-            <button onclick="beep(5);">Beep 5x</button>
-            <button onclick="beep(3, 400, 100);">Beep 3x long</button>
+            Trigger the display of device information such as serial number and current IP address.
         </p>
 
-        <h2>Buzzer Indicator</h2>
-        <p>
-            When the buzzer on the Pi is active (playing a beep sequence), this indicator is flashed.
-        </p>
         <p class="center">
-            <span id="buzzer"></span>
+            <button onclick="show_info()">Show Device Info</button>
         </p>
+
+
+
+        <h2>
+           Show Zollhof logo
+        </h2>
+
+        <p>
+            Show the logo of the Zollhof digital founders center in Nuremberg, Germany. (They are using our starter kit and, amusingly, their logo fits onto the hex display!)
+        </p>
+
+        <p class="center">
+            <button onclick="show_logo('zollhof')">Show Logo</button>
+        </p>
+
+        <h2>
+            Show your own info
+        </h2>
+
+        <p>
+            Enter any hexadecimal (0 - 9, A - F) string to be scrolled through the hexdisplay.
+        </p>
+
+        Hexadecimcal string: <input type="text" id="hexString" value="-- 0123456789ABCDEF --">
+
+        <p class="center">
+            <button onclick="
+            var str = document.getElementById('hexString').value;
+            scroll_message(str);
+            ">Show hexadecimal string</button>
+        </p>
+
+
+        <h2>
+           Clear the display
+        </h2>
+
+        <p>
+            Clear the display.
+        </p>
+
+        <p class="center">
+            <button onclick="set_clear()">Clear</button>
+        </p>
+
 
     </div>
 

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <link rel="shortcut icon" href="favicon.ico" type="image/ico">
+
+    <title>Crossbar.io IoT Starterkit</title>
+
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css"> -->
+
+    <link rel="stylesheet" href="http://tavendo-common-static.s3-eu-west-1.amazonaws.com/css/materialize_cb.min.css.gz">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="_control_page_assets/styles.css">
+
+    <style>
+        .controlPageLinks {
+            text-decoration: underline;
+            font-size: 1.5rem;
+        }
+        button.small {
+            font-size: 1rem;
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="nav-wrapper container">
+            <a href="/" class="brand-logo">
+                <img src="_control_page_assets/crossbar_icon_inverted.svg" alt="crossbar logo inverted" width="60" height="60">
+                <img src="_control_page_assets/crossbar_iot_cookbook.svg" alt="crossbar logo inverted" class="notOnNarrowScreens" width="248" height="60">
+            </a>
+            <span>
+                Starterkit
+            </span>
+       </div>
+    </nav>
+
+    <div id="demo_body" class="container">
+
+        <h1>Crossbar.io IoT Starterkit Controls</h1>
+
+        <p>
+            The links at the bottom of this page lead to the control pages for the buzzer, LED colorstrip and hexdisplay components of the Crossbar.io IoT Starterkit.
+        </p>
+
+        <div>
+            Current Pi serial is <strong id="currentSerial">-- none --</strong>
+        </div>
+
+        <br>
+
+        <!-- <div id="serial" class="hidden"> -->
+        <div>
+            If no serial number is shown above, or you want to control another Pi, the enter the serial number: <input type="text" id="serialNumber">
+            <br>
+            The serial will then already be set on the control pages.
+            <br>
+            <button class="small" onclick="serialEntered()">Connect</button>
+        </div>
+
+
+        <h4>
+            Open
+        </h4109>
+        <ul class="controlPageLinks center">
+            <li>
+                <!-- <button> -->
+                    <a id="link_buzzer" href="/buzzer/web" target="_blank">Buzzer Controls</a>
+                <!-- </button> -->
+            </li>
+            <li>
+                <!-- <button> -->
+                    <a id="link_colorstrip" href="/colorstrip/web" target="_blank">Colorstrip Controls</a>
+                <!-- </button> -->
+            </li>
+            <li>
+                <!-- <button> -->
+                    <a id="link_hexdisplay" href="hexdisplay/web" target="_blank">Hexdisplay Controls</a>
+                <!-- </button> -->
+            </li>
+        </ul>
+
+    </div>
+
+    <script>
+        var serial = document.location.search.split("=")[1];
+        console.log("serial", serial);
+
+        // FIXME
+        // No serial:
+        //     - display the serial entry part of the page
+        //     - should not necessarily block the links, since
+        //         there is the possibility to enter the serial there
+        //         and a user may want to explore the pages without
+        //         having a Pi and valid serial number
+        // Serial:
+        //     - as is
+
+        if (!serial) {
+            console.log("no serial");
+
+            // show the serial input controls
+            document.getElementById("serial").classList.remove("hidden");
+
+        } else {
+            // https://demo.crossbar.io/starterkit/colorstrip/web/index.html?serial=5b0966b4
+
+            // var prefix = "https://demo.crossbar.io/starterkit/";
+            var prefix = "";
+
+            var link_buzzer = document.getElementById("link_buzzer");
+            var link_colorstrip = document.getElementById("link_colorstrip");
+            var link_hexdisplay = document.getElementById("link_hexdisplay");
+
+            document.getElementById("currentSerial").innerHTML = serial;
+
+            link_buzzer.href = prefix + "buzzer/web/index.html?serial=" + serial;
+            link_colorstrip.href = prefix + "colorstrip/web/index.html?serial=" + serial;
+            link_hexdisplay.href = prefix + "hexdisplay/web/index.html?serial=" + serial;
+        }
+
+        function serialEntered() {
+           serial = document.getElementById("serialNumber").value;
+
+           // --> same serial used on page reload
+           window.location.replace(window.location.pathname + '?serial=' + serial);
+
+           // --> enter new searial on reload (with other solutions this requires
+           // editing the URL, which is cumbersome on mobile)
+           // connect();
+        }
+    </script>
+</body>
+</html>

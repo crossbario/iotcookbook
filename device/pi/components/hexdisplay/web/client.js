@@ -1,7 +1,6 @@
 console.log("Running on AutobahnJS ", autobahn.version);
 
 // UI elements
-var buzzer = document.getElementById('buzzer');
 var status_url = document.getElementById('status_url');
 var status_realm = document.getElementById('status_realm');
 var status_serial = document.getElementById('status_serial');
@@ -19,15 +18,15 @@ if (!serial) {
    connect();
 }
 
-// the URI prefix the buzzer component on the Pi is using
-var prefix = 'io.crossbar.demo.iotstarterkit.' + serial + '.buzzer.';
 
 // the WAMP session
 var session;
-
 var prefix;
 
 function connect() {
+
+   // the URI prefix the buzzer component on the Pi is using
+   prefix = 'io.crossbar.demo.iotstarterkit.' + serial + '.hexdisplay.';
 
    // the URL of the WAMP Router (Crossbar.io)
    var wsuri;
@@ -57,35 +56,9 @@ function connect() {
 
        status_realm.innerHTML = '' + details.authid + '@' + details.realm;
        status_url.innerHTML = '' + details.transport.url + ' (' + details.transport.protocol + ')';
+       status_serial.innerHTML = serial;
 
-       session.call(prefix + 'started').then(
-           function (started) {
-               status_serial.innerHTML = serial;
-               status_started.innerHTML = started;
-           },
-           function (err) {
-               if (err.error === 'wamp.error.no_such_procedure') {
-                   window.location.replace(window.location.pathname);
-               } else {
-                   console.log(err);
-               }
-           }
-       );
-
-       function on_beep_started (args, kwargs) {
-           console.log('beeping started:', kwargs);
-           buzzer.style.backgroundColor = '#ff0';
-       }
-
-       function on_beep_ended () {
-           console.log('beeping ended');
-           buzzer.style.backgroundColor = '#333';
-       }
-
-       session.subscribe(prefix + 'on_beep_started', on_beep_started);
-       session.subscribe(prefix + 'on_beep_ended', on_beep_ended);
    };
-
 
    // fired when connection was lost (or could not be established)
    connection.onclose = function (reason, details) {
@@ -95,10 +68,11 @@ function connect() {
        status_url.innerHTML = '-';
    }
 
-
    // now actually open the connection
    connection.open();
+
 }
+
 
 function serialEntered() {
    serial = document.getElementById("serialNumber").value;
@@ -111,19 +85,48 @@ function serialEntered() {
    // connect();
 }
 
+// our functions for controlling the hexdisplay
 
-// this will be used from UI elements
-function beep(count, on, off) {
-    if (session) {
-        session.call(prefix + 'beep', [count, on, off]).then(
-            function () {
-                console.log('beeped!');
-            },
-            function (err) {
-                console.log('beeping failed:', err);
-            }
-        );
-    } else {
-        console.log('cannot beep: not connected');
-    }
+function show_info() {
+   session.call(prefix + "show_info").then(
+      function(res) {
+         console.log("calling 'show_info' successfull!");
+      },
+      function(err) {
+         console.log("calling 'show_info' resulted in error:", err)
+      }
+   )
+}
+
+function show_logo(logo) {
+   session.call(prefix + "show_logo", [logo]).then(
+      function(res) {
+         console.log("calling 'show_logo' successfull!");
+      },
+      function(err) {
+         console.log("calling 'show_logo' resulted in error:", err)
+      }
+   )
+}
+
+function scroll_message(str) {
+   session.call(prefix + "scroll_message", [str]).then(
+      function(res) {
+         console.log("calling 'scroll_message', str successfull!");
+      },
+      function(err) {
+         console.log("calling 'scroll_message', str resulted in error:", err)
+      }
+   )
+}
+
+function set_clear() {
+   session.call(prefix + "set_clear").then(
+      function(res) {
+         console.log("calling 'set_clear' successfull!");
+      },
+      function(err) {
+         console.log("calling 'set_clear' resulted in error:", err)
+      }
+   )
 }

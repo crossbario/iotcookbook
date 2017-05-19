@@ -30,7 +30,7 @@ def get_serial():
             line = line.strip()
             if line.startswith('Serial'):
                 _, serial = line.split(':')
-                return int(serial.strip(), 16)
+                return serial.strip().lstrip('0')
 
 
 class HexDisplayComponent(ApplicationSession):
@@ -47,23 +47,66 @@ class HexDisplayComponent(ApplicationSession):
         # get custom configuration
         cfg = self.config.extra
 
+        self._loop = None
+
         # initialize display
         self._display = HexDisplay(address=cfg['i2c_address'])
         self._display.begin()
         self._display.set_clear()
-        self._display.set_brightness(int(round(cfg[u'brightness'] * 15)))
+        self.set_brightness(cfg[u'brightness'])
+
+        # register procedures
+        for proc in [
+            (self.start_loop, u'start_loop'),
+            (self.stop_loop, u'stop_loop'),
+            (self.show_info, u'show_info'),
+            (self.show_logo, u'show_logo'),
+            (self.set_brightness, u'set_brightness'),
+            (self._display.is_scrolling, u'is_scrolling'),
+            (self._display.scroll_message, u'scroll_message'),
+            (self._display.set_message, u'set_message'),
+            (self._display.set_clear, u'set_clear'),
+        ]:
+            uri = u'{}.{}'.format(self._prefix, proc[1])
+            yield self.register(proc[0], uri)
+            self.log.info('registered procedure {uri}', uri=uri)
 
         self.log.info("HexDisplayComponent ready!")
 
-        while True:
-            yield self.welcome()
+        # start endless loop .. until stopped
+        #self.start_loop(logo=u'zollhof')
+        self.show_logo(u'zollhof')
+
+    def set_brightness(self, brightness):
+        if type(brightness) != float or brightness < 0 or brightness > 1:
+            raise Exception('invalid brightness value "{}", must be a float between 0.0 and 1.0'.format(brightness))
+        self._display.set_brightness(int(round(brightness * 15)))
+
+    def start_loop(self, logo=None):
+        if self._loop:
+            raise Exception('already looping')
+
+        @inlineCallbacks
+        def loop():
+            if not self._display.is_scrolling():
+                yield self.show_info()
+                if logo:
+                    show_logo(logo)
+
+        self._loop = LoopingCall(loop)
+        self._loop.start(20)
+
+    def stop_loop(self):
+        if self._loop:
+            self._loop.stop()
+            self._loop = None
 
     @inlineCallbacks
-    def welcome(self):
+    def show_info(self):
         msgs = []
 
         # Pi serial number
-        msg = u'serial {:0>6d}'.format(self._serial)
+        msg = u'serial {}'.format(self._serial)
         self.log.info(msg)
         msgs.append(msg)
 
@@ -83,16 +126,26 @@ class HexDisplayComponent(ApplicationSession):
         msg = u'     '.join(msgs)
         yield self._display.scroll_message(msg)
 
-        # write the ZOLLHOF logo
-        self._display.set_raw_digit(0, 0b0001001)
-        self._display.set_raw_digit(1, 0b0111111)
-        self._display.set_raw_digit(2, 0b0110110)
-        self._display.set_raw_digit(3, 0b1110000)
-        self._display.set_raw_digit(4, 0b0111111)
-        self._display.set_raw_digit(5, 0b1110001)
-        self._display.write_display()
+    @inlineCallbacks
+    def show_text(self, text):
+        yield self._display.scroll_message(text)
 
-        yield sleep(5)
+    # show the logo of the Zollhof digital founder center in Nuremberg, Germany
+    def show_logo(self, name):
+        if self._display.is_scrolling():
+            raise Exception('display busy with scrolling text')
+
+        if name == u'zollhof':
+            # write the ZOLLHOF logo
+            self._display.set_raw_digit(0, 0b0001001)
+            self._display.set_raw_digit(1, 0b0111111)
+            self._display.set_raw_digit(2, 0b0110110)
+            self._display.set_raw_digit(3, 0b1110000)
+            self._display.set_raw_digit(4, 0b0111111)
+            self._display.set_raw_digit(5, 0b1110001)
+            self._display.write_display()
+        else:
+            raise Exception('unknown logo "{}"'.format(name))
 
     def onLeave(self, details):
         self.log.info("Session closed: {details}", details=details)
@@ -132,7 +185,7 @@ if __name__ == '__main__':
         u'i2c_address': 0x77,
 
         # brightness of display (0-1)
-        u'brightness': 0.6,
+        u'brightness': 1.,
     }
 
     # create and start app runner for our app component ..

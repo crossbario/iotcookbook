@@ -75,6 +75,13 @@ class HexDisplay(HT16K33):
     Total number of digits (1-8).
     """
 
+    def __init__(self, address):
+        HT16K33.__init__(self, address)
+        self._is_scrolling = False
+
+    def is_scrolling(self):
+        return self._is_scrolling
+
     def set_clear(self):
         """
         Clear and refresh the display.
@@ -88,7 +95,6 @@ class HexDisplay(HT16K33):
         """
         assert(pos in range(self.TOTAL_DIGITS))
         assert(type(value) in six.integer_types)
-
         self.buffer[pos * 2] = value & 0xFF
 
     def set_digit(self, pos, char, decimal=False):
@@ -103,7 +109,6 @@ class HexDisplay(HT16K33):
         """
         assert(pos in range(self.TOTAL_DIGITS))
         assert(type(char) == six.text_type)
-
         char = char.strip().upper()
         bitmask = DIGIT_VALUES.get(char, 0x00)
         self.buffer[pos * 2] = bitmask & 0xFF
@@ -133,6 +138,11 @@ class HexDisplay(HT16K33):
         Set a message text on the display and refresh the display.
         """
         assert(type(message) == six.text_type)
+        if self._is_scrolling:
+            raise Exception('display busy with scrolling text')
+        self._set_message(message)
+
+    def _set_message(self, message):
         i = 0
         for c in message[:self.TOTAL_DIGITS]:
             self.set_digit(i, c)
@@ -141,11 +151,20 @@ class HexDisplay(HT16K33):
 
     @inlineCallbacks
     def scroll_message(self, message, delay=150):
+        if self._is_scrolling:
+            raise Exception('display busy with scrolling text')
         assert(type(message) == six.text_type)
-        _message = message + u' ' * self.TOTAL_DIGITS
-        for i in range(len(message) + 1):
-            self.set_message(_message[i:])
-            yield sleep(delay / 1000.)
+
+        self._is_scrolling = True
+        try:
+            _message = message + u' ' * self.TOTAL_DIGITS
+            for i in range(len(message) + 1):
+                self._set_message(_message[i:])
+                yield sleep(delay / 1000.)
+        except:
+            raise
+        finally:
+            self._is_scrolling = False
 
 
 if __name__ == '__main__':

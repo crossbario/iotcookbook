@@ -28,7 +28,7 @@ def get_serial():
             line = line.strip()
             if line.startswith('Serial'):
                 _, serial = line.split(':')
-                return u'{}'.format(int(serial.strip(), 16))
+                return serial.strip().lstrip('0')
 
 
 class ColoramaDisplay(ApplicationSession):
@@ -73,14 +73,9 @@ class ColoramaDisplay(ApplicationSession):
 
         self.log.info("ColoramaDisplay ready!")
 
-        while True:
-            yield self.flash(delay=20, repeat=5)
-            yield self.set_color(40, 40, 40)
-            yield sleep(5)
-            cols = []
-            for i in range(3):
-                cols.append(random.randint(0, 255))
-            yield self.color_wipe(*cols, wait_ms=20, repeat=5)
+        # flash + set pixels to white to indicate component running
+        yield self.flash(delay=20, repeat=5)
+        yield self.set_color(40, 40, 40)
 
     def wheel(self, pos):
         """Generate rainbow colors across 0-255 positions."""
@@ -120,7 +115,7 @@ class ColoramaDisplay(ApplicationSession):
 
     # Define functions which animate LEDs in various ways.
     @inlineCallbacks
-    def color_wipe(self, r, g, b, wait_ms=50, repeat=1):
+    def color_wipe(self, r=255, g=0, b=0, wait_ms=50, repeat=1):
         """Wipe color across display a pixel at a time."""
         self.log.info('color-wipe animation starting ..')
         for i in range(repeat):
@@ -130,7 +125,7 @@ class ColoramaDisplay(ApplicationSession):
                 yield sleep(wait_ms / 1000.0)
 
     @inlineCallbacks
-    def theater_chase(self, r, g, b, wait_ms=50, iterations=10):
+    def theater_chase(self, r=0, g=255, b=0, wait_ms=50, iterations=10):
         """Movie theater light style chaser animation."""
         self.log.info('theater-chase animation starting ..')
         for j in range(iterations):
