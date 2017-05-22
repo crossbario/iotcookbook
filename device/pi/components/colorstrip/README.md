@@ -35,7 +35,7 @@ You should see a couple of visual patterns and animations on the neopixels, with
 
 Then open this URL:
 
-* [https://demo.crossbar.io/iotcookbook/device/pi/recipes/colorstrip](https://demo.crossbar.io/iotcookbook/device/pi/recipes/colorstrip)
+* [https://demo.crossbar.io/starterkit/colorstrip/web](https://demo.crossbar.io/starterkit/colorstrip/web)
 
 in your browser.
 

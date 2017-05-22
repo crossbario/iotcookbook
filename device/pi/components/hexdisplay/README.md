@@ -34,13 +34,18 @@ Here is how that looks:
 
 Then open this URL:
 
-* [https://demo.crossbar.io/iotcookbook/device/pi/recipes/buzzer?serial=41f4b2fb](https://demo.crossbar.io/iotcookbook/device/pi/recipes/hexdisplay?serial=41f4b2fb)
+* [https://demo.crossbar.io/starterkit/hexdisplay/web](https://demo.crossbar.io/starterkit/hexdisplay/web)
 
 in your browser.
 
-> Replace `41f4b2fb` with the serial number of your Pi (`grep Serial /proc/cpuinfo`).
+You should see a Web page which allows you to control the hexdisplay (change color, start disco mode) after entering the serial number of your Pi.
 
-You should see a Web page which allows you to control the hexdisplay (change color, start disco mode).
+Get the serial by doing
+
+```console
+pi@raspberrypi:~ $ grep Serial /proc/cpuinfo
+```
+and strip the leading zeros.
 
 This demonstrates secure remote procedure calls from any browser based device to an embedded device running a Python/Docker component and possibly behind firewalls and NATs.
 

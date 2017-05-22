@@ -36,7 +36,7 @@ Here is how that looks:
 
 Then open this URL:
 
-* [https://demo.crossbar.io/iotcookbook/device/pi/recipes/buzzer](https://demo.crossbar.io/iotcookbook/device/pi/recipes/buzzer)
+* [https://demo.crossbar.io/starterkit/buzzer/web](https://demo.crossbar.io/starterkit/buzzer/web)
 
 in your browser.
 
