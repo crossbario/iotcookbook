@@ -209,3 +209,43 @@ Eg given above, this Pi (MAC `F4:F2:6D:14:1B:56`) will join one of the Wifi netw
 * office: 192.168.1.142
 * mobile: 192.168.43.105
 * home: 192.168.55.104
+
+
+## Image creation and cloning
+
+The following describes how to clone a SD card, eg for the Crossbar.io IoT Starterkit.
+
+You will need these tools (on your host, not the Pi):
+
+```console
+sudo apt install -y pv pigz
+```
+
+Determine your SD card device:
+
+```console
+sudo fdisk -l
+```
+
+> WARNING: you must be absolutely positive on the device! `dd` is dangerous - it will happily overwrite your main disk if you ask it to.
+
+
+Insert source SD card and copy the image to a local file (this take roughly 8 minutes on my box):
+
+```console
+sudo dd if=/dev/sdb bs=1M | pv | pigz --fast > cb-iot-starterkit.img.gz
+```
+
+To copy the image to a target SD card (a 16GB):
+
+```console
+sudo sh -c 'pigz -dc cb-iot-starterkit.img.gz | pv -s 15931539456 | dd of=/dev/sdb bs=1M' && sudo sync
+```
+
+> IMPORTANT: do NOT forget `sudo sync` to actually flush all bytes to the SD card and wait until this is finished!
+
+To upload the image to S3:
+
+```console
+aws s3 cp cb-iot-starterkit.img.gz s3://package.crossbar.io/
+```
