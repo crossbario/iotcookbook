@@ -118,5 +118,170 @@ record 2
 ndeftool l Dump2.ndef print
 ```
 
+## Using Arduino Library 
+in this section a Arduino library is used to communicate over _I2C_-Bus and write a NDEF - Message to the _ST M24SR64_ 
+> Library can be found [here](https://github.com/rena2019/ArduinoM24SR)
+>
 
+Debuging Serial print for initialization and writing : 
+```console
+_setup
+
+writeGPO
+
+verifyI2cPassword
+
+selectFile_NDEF_App
+
+sendApdu
+GetI2Csession: 0
+=> 
+StartTransmission: 02 00 A4 04 00 07 D2 76 00 00 85 01 01 A609
+
+receiveResponse, len=5
+<= 03 90 00 2D 53 
+sendApdu
+GetI2Csession: 0
+=> 
+StartTransmission: 03 00 20 00 03 10 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 0382
+
+receiveResponse, len=5
+<= 02 90 00 F1 09 Password passed
+
+sendApdu
+GetI2Csession: 0
+=> 
+StartTransmission: 02 00 A4 00 0C 02 E1 01 7F0D
+
+receiveResponse, len=5
+<= 03 90 00 2D 53 
+GetI2Csession: 0
+=> 
+StartTransmission: 03 00 D6 00 04 01 61 D0E3
+
+receiveResponse, len=5
+<= 02 90 00 F1 09 
+send DESELECT
+GetI2Csession: 0
+=> 
+StartTransmission: C2 E0B4
+
+receiveResponse, len=3
+<= C2 E0 B4 
+free RAM: 6476
+
+free RAM: 6277
+
+NDEF Message 3 records, 71 bytes
+  NDEF Record
+    TNF 0x1 Well Known
+    Type Length 0x1 1
+    Payload Length 0x13 19
+    Type 55  U
+    Payload 00 68 74 74 70 3A 2F 2F 63 72 6F 73 73 62 61 72 2E 69 6F  .http://crossbar.io
+    Record is 23 bytes
+  NDEF Record
+    TNF 0x1 Well Known
+    Type Length 0x1 1
+    Payload Length 0x13 19
+    Type 55  U
+    Payload 00 68 74 74 70 3A 2F 2F 63 72 6F 73 73 62 61 72 2E 69 6F  .http://crossbar.io
+    Record is 23 bytes
+  NDEF Record
+    TNF 0x1 Well Known
+    Type Length 0x1 1
+    Payload Length 0x15 21
+    Type 54  T
+    Payload 02 65 6E 68 74 74 70 3A 2F 2F 63 72 6F 73 73 62 61 72 2E 69 6F  .enhttp://crossbar.io
+    Record is 25 bytes
+NDefRecord:   NDEF Record
+    TNF 0x1 Well Known
+    Type Length 0x1 1
+    Payload Length 0x13 19
+    Type 55  U
+    Payload 00 68 74 74 70 3A 2F 2F 63 72 6F 73 73 62 61 72 2E 69 6F  .http://crossbar.io
+    Record is 23 bytes
+
+selectFile_NDEF_App
+
+sendApdu
+GetI2Csession: 0
+=> 
+StartTransmission: 02 00 A4 04 00 07 D2 76 00 00 85 01 01 A609
+
+receiveResponse, len=5
+<= 02 90 00 F1 09 
+selectFile_NDEF_file
+GetI2Csession: 0
+=> 
+StartTransmission: 03 00 A4 00 0C 02 00 01 817C
+
+receiveResponse, len=5
+<= 03 90 00 2D 53 
+updateBinary_NdefMsgLen0
+GetI2Csession: 0
+=> 
+StartTransmission: 02 00 D6 00 00 02 00 00 D4B6
+
+receiveResponse, len=5
+<= 02 90 00 F1 09 
+updateBinary
+91 01 13 55 00 68 74 74 70 3A 2F 2F 63 72 6F 73 
+73 62 61 72 2E 69 6F 11 01 13 55 00 68 74 74 70 
+3A 2F 2F 63 72 6F 73 73 62 61 72 2E 69 6F 51 01 
+15 54 02 65 6E 68 74 74 70 3A 2F 2F 63 72 6F 73 
+73 62 61 72 2E 69 6F 
+chunk_len:24, pos:0
+GetI2Csession: 0
+=> 
+StartTransmission: 03 00 D6 00 02 18 91 01 13 55 00 68 74 74 70 3A 2F 2F 63 72 6F 73 73 62 61 72 2E 69 6F 11 3D72
+
+receiveResponse, len=5
+<= F2 02 0A 72 
+WTX
+GetI2Csession: 0
+=> 
+StartTransmission: F2 02 0A72
+<= 
+chunk_len:24, pos:24
+GetI2Csession: 0
+=> 
+StartTransmission: 02 00 D6 00 1A 18 01 13 55 00 68 74 74 70 3A 2F 2F 63 72 6F 73 73 62 61 72 2E 69 6F 51 01 0037
+
+receiveResponse, len=5
+<= F2 03 83 63 
+WTX
+GetI2Csession: 0
+=> 
+StartTransmission: F2 03 8363
+<= 
+chunk_len:23, pos:48
+GetI2Csession: 0
+=> 
+StartTransmission: 03 00 D6 00 32 17 15 54 02 65 6E 68 74 74 70 3A 2F 2F 63 72 6F 73 73 62 61 72 2E 69 6F 8235
+
+receiveResponse, len=5
+<= F2 02 0A 72 
+WTX
+GetI2Csession: 0
+=> 
+StartTransmission: F2 02 0A72
+<= 
+updateBinaryLen
+
+GetI2Csession: 0
+=> 
+StartTransmission: 02 00 D6 00 00 02 00 47 6F80
+
+receiveResponse, len=5
+<= 02 90 00 F1 09 
+send DESELECT
+GetI2Csession: 0
+=> 
+StartTransmission: C2 E0B4
+
+receiveResponse, len=3
+<= C2 E0 B4 
+```
+Next step should be analyzing the _I2C_ - messages with the Datasheet to get a I2C - session working with the raspberry pi
  
