@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <title>Crossbar.io IoT Cookbook - Pi/Buzzer</title>
+
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css"> -->
+
+    <link rel="stylesheet" href="http://tavendo-common-static.s3-eu-west-1.amazonaws.com/css/materialize_cb.min.css.gz">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+
+    <style>
+        #notifier {
+            display: inline-block;
+            width: 2em;
+            height: 2em;
+            background-color: #333;
+        }
+    </style>
+
+</head>
+<body>
+    <nav>
+        <div class="nav-wrapper container">
+            <a href="/" class="brand-logo">
+                <img src="crossbar_icon_inverted.svg" alt="crossbar logo inverted" width="60" height="60">
+                <img src="crossbar_iot_cookbook.svg" alt="crossbar logo inverted" class="notOnNarrowScreens" width="248" height="60">
+            </a>
+            <span>
+                Button
+            </span>
+       </div>
+    </nav>
+
+    <div id="demo_body" class="container">
+
+        <h1>
+            Crossbar.io IoT Cookbook: Pi/Button Frontend
+        </h1>
+
+        <p>
+            This is the demo frontend for the
+            <a href="https://github.com/crossbario/iotcookbook/tree/master/device/pi/recipes/buzzer">
+            Button Recipe</a> in the Crossbar.io IoT Cookbook.
+        </p>
+
+        <div id="serial" class="hidden">
+            Enter the serial number of the Pi you want to control: <input type="text" id="serialNumber">
+            <br>
+            <div class="center">
+                <button onclick="serialEntered()">Connect</button>
+            </div>
+        </div>
+
+        <h2>Status</h2>
+        <table>
+            <tr>
+                <td>Connected to URL (protocol)</td><td><b id="status_url">-</b></td>
+            </tr>
+            <tr>
+                <td>Joined as authid@realm</td><td><b id="status_realm">-</b></td>
+            </tr>
+            <tr>
+                <td>Addressing Pi with serial No.:</td><td><b id="status_serial">-</b></td>
+            </tr>
+            <tr>
+                <td>Pi component started (UTC)</td><td><b id="status_started">-</b></td>
+            </tr>
+        </table>
+
+        <h1>Button Trigger</h1>
+        <p>
+           Click to test communication with raspberry backend
+        <p class="center">
+            <button onclick="press();">PRESS</button>
+        </p>
+
+        <h1>Button Indicator</h1>
+        <p>
+            When the button on the Pi has detected a falling edge, this indicator is flashed for 1 sec.
+        </p>
+        <p class="center">
+            <span id="notifier"></span>
+        </p>
+
+        <h1>LED</h1>
+        <p>
+            There are two Buttons to turn the LED on pin 15 on and off
+        </p>
+        <p class="center">
+            <button onclick="led_on();">LED_ON</button>
+            <button onclick="led_off();">LED_OFF</button>
+        </p>
+        <style>
+        #LED {
+            display: inline-block;
+            width: 20em;
+            height: 2em;
+            background-color: #FFFFFF;
+        }
+    </style>
+
+ <p class="center">
+            <span id="LED"></span>
+        </p>
+
+
+    </div>
+
+    <script>AUTOBAHN_DEBUG = false;</script>
+    <script src="https://demo.crossbar.io/shared/autobahn/autobahn.min.js"></script>
+    <script src="client.js"></script>
+</body>
+</html>
