@@ -212,7 +212,9 @@ class ButtonComponent(ApplicationSession):
 if __name__ == '__main__':
 
     # Crossbar.io connection configuration
+
     url = os.environ.get('CBURL', u'wss://demo.crossbar.io/ws')
+    # url = os.environ.get('CBURL', u'192.168.1.142')
     realm = os.environ.get('CBREALM', u'crossbardemo')
 
     # parse command line parameters
