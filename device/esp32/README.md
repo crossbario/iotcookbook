@@ -23,3 +23,9 @@ export PATH=${PATH}:${HOME}/esp/xtensa-esp32-elf/bin
 export IDF_PATH=${HOME}/esp/esp-idf
 oberstet@thinkpad-t430s:~/esp$ 
 ```
+
+Further, to be able to flash from a non-root user:
+
+```console
+sudo usermod -a -G dialout $USER
+```
