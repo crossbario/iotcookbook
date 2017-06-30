@@ -38,7 +38,6 @@ make flash monitor
 
 and to stop/exit:
 
-```
 ```console
 --- idf_monitor on /dev/ttyUSB0 115200 ---
 --- Quit: Ctrl+] | Menu: Ctrl+T | Help: Ctrl+T followed by Ctrl+H ---
