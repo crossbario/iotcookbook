@@ -9,6 +9,7 @@ var status_started = document.getElementById('status_started');
 
 // get serial from document URL
 var serial = document.location.search.split("=")[1];
+console.log("initial serial", serial);
 
 if (!serial) {
 
@@ -58,32 +59,34 @@ function connect() {
       status_realm.innerHTML = '' + details.authid + '@' + details.realm;
       status_url.innerHTML = '' + details.transport.url + ' (' + details.transport.protocol + ')';
 
-      session.call(prefix + 'started').then(
-         function (started) {
-            status_serial.innerHTML = serial;
-            status_started.innerHTML = started;
-           },
-         function (err) {
-            if (err.error === 'wamp.error.no_such_procedure') {
-               window.location.replace(window.location.pathname);
-            } else {
-               console.log(err);
-            }
-         }
-      );
+      // session.call(prefix + 'started').then(
+      //    function (started) {
+      //       status_serial.innerHTML = serial;
+      //       status_started.innerHTML = started;
+      //      },
+      //    function (err) {
+      //       if (err.error === 'wamp.error.no_such_procedure') {
+      //          window.location.replace(window.location.pathname);
+      //       } else {
+      //          console.log(err);
+      //       }
+      //    }
+      // );
+      //
+      function is_dark (args, kwargs) {
+         console.log('is_dark', args, kwargs);
 
-      function on_threshold_crossed (args, kwargs) {
-         console.log('light sensor threshold crossed', kwargs);
-
-         if(kwargs.threshold_crossed) {
-            threshold_indicator.style.backgroundColor = '#ff0';
-         } else {
-            threshold_indicator.style.backgroundColor = '#333';
-         }
+        threshold_indicator.classList.add("activated");
 
       }
 
-      session.subscribe(prefix + 'on_threshold_crossed', on_threshold_crossed);
+      function is_light (args, kwargs) {
+         console.log('is_light', args, kwargs);
+         threshold_indicator.classList.remove("activated");
+      }
+
+      session.subscribe(prefix + 'is_dark', is_dark);
+      session.subscribe(prefix + 'is_light', is_light);
    };
 
 
@@ -101,7 +104,12 @@ function connect() {
 }
 
 function serialEntered() {
+
+  console.log("serialEntered");
+
    serial = document.getElementById("serialNumber").value;
+
+   console.log("serial", serial);
 
    // --> same serial used on page reload
    window.location.replace(window.location.pathname + '?serial=' + serial);
