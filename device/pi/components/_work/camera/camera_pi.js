@@ -1,6 +1,6 @@
 var autobahn = require('autobahn');
 
-var when = autobahn.when; 
+var when = autobahn.when;
 var session = null;
 
 function main () {
@@ -10,8 +10,8 @@ function main () {
    // the WAMP connection to the Router
    //
    var connection = new autobahn.Connection({
-      url: "ws://192.168.1.134:8080/ws", // replace with the url of your crossbar instance
-      realm: "iot_cookbook"
+      url: "wss://demo.crossbar.io/ws", // replace with the url of your crossbar instance
+      realm: "crossbardemo"
    });
 
    // fired when connection is established and session attached
@@ -36,23 +36,23 @@ function main () {
 
          // adjust to fit your webcam resolution
          exec("fswebcam -d /dev/video0 -r 640x480 --no-banner --save '-' | uuencode --base64 /dev/stdout", function(err, stdout, stderr) {
-            
+
             if (stdout != "") {
-               cameraResult.resolve(["pi", stdout);
+               cameraResult.resolve(["pi", stdout]);
             }
 
             if (stderr != "") {
                // actually contains feedback about actions on successful photo taken
                console.log("stderr ", stderr);
             }
-            
+
             if (err != null) {
                console.log("exec error: ", err);
                cameraResult.reject(err);
             };
          })
 
-         return cameraResult.promise; 
+         return cameraResult.promise;
       };
 
       session.register("io.crossbar.examples.pi.camera.take_photo", takePhoto).then(
@@ -64,7 +64,7 @@ function main () {
          }
       );
    };
-      
+
 
    // fired when connection was lost (or could not be established)
    //
@@ -79,4 +79,3 @@ function main () {
 }
 
 main();
-
