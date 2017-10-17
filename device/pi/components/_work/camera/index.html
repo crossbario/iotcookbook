@@ -16,7 +16,7 @@
 
    <button id="shutter">Take Photo</button>
 
-   <script src="/shared/autobahn/autobahn.min.js"></script>
+   <script src="autobahn.min.js"></script>
    <script>
       var session = null;
       var image = document.getElementById("image");
@@ -25,36 +25,39 @@
       // the URL of the WAMP Router (Crossbar.io)
       var wsuri;
       if (document.location.origin == "file://") {
-         wsuri = "ws://127.0.0.1:8080/ws"; // localhost for development
+         wsuri = "wss://demo.crossbar.io/ws"; // localhost for development
       } else {
          wsuri = (document.location.protocol === "http:" ? "ws:" : "wss:") + "//" +
                      document.location.host + "/ws"; // URL of the Crossbar.io instance this is served from
       }
 
+      wsuri = 'wss://demo.crossbar.io/ws';
+
       // the WAMP connection to the Router
       //
       var connection = new autobahn.Connection({
          url: wsuri, // replace with URL of WAMP router if this doesn't serve the file
-         realm: "iot_cookbook"
+         realm: "crossbardemo"
       });
 
       var cameraResult = null;
 
       var requestPhoto = function () {
 
-         session.call("io.crossbar.examples.pi.camera.take_photo").then(
+         session.call("io.crossbar.demo.iotstarterkit.663a384.camera.take_photo").then(
             function (res) {
-               
+                console.log("image received", res);
+
                imageProgress.innerHTML = "";
 
-               base64image = res;
+               base64image = res[1];
                // need to remove the header and footer which uuencode adds
                base64image = base64image.slice(29);
                base64image = base64image.slice(0, -6);
 
                image.src = "data:image/jpg;base64," + base64image;
 
-            }, 
+            },
             function (err) {
                console.log("requestImage failed", err);
                imageProgress.innerHTML = "Error getting image!";
@@ -71,7 +74,7 @@
          console.log("connected");
 
          document.getElementById("shutter").addEventListener("click", requestPhoto);
-         
+
 
       };
 
