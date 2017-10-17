@@ -82,7 +82,7 @@ class LightSensorComponent(ApplicationSession):
         # register procedures
         for proc in [
             (self.started, u'started'),
-            (self._is_pressed, u'is_dark'),
+            (self._is_dark, u'is_dark'),
             # (self.press, u'press'),
         ]:
             uri = u'{}.{}'.format(self._prefix, proc[1])
