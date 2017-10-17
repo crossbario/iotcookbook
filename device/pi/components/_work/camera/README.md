@@ -1,4 +1,6 @@
-R# Raspberry Pi Camera component
+# Raspberry Pi Camera component
+
+> may be out of date
 
 The Raspberry Pi Camera component allows the remote triggering of a photo via a WAMP procedure call. The photo is returned as the call result.
 
