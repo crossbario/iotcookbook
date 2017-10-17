@@ -68,10 +68,10 @@ class LightSensorComponent(ApplicationSession):
         # initialize button
         self._light_sensor_pin = cfg['light_sensor_pin']
         GPIO.setwarnings(False)
-        config_light_sensor_gpio(_light_sensor_pin)
+        config_light_sensor_gpio(self._light_sensor_pin)
 
         # setup edge detection for the light sensor
-        GPIO.add_event_detect(_light_sensor_pin, GPIO.RISING, callback=self.light_change)
+        GPIO.add_event_detect(self._light_sensor_pin, GPIO.RISING, callback=self.light_change)
 
         # remember startup timestamp
         self._started = utcnow()
