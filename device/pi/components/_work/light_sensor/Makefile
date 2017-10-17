@@ -1,7 +1,7 @@
 .PHONY: start
 
 build:
-	docker build -t cookbook-buzzer -f Dockerfile .
+	docker build -t cookbook-light-sensor -f Dockerfile .
 
 start: build
 	docker run -it --rm \
@@ -12,7 +12,7 @@ start: build
 		--net=host \
 		-e CBURL='wss://demo.crossbar.io/ws' \
 		-e CBREALM='crossbardemo' \
-		cookbook-buzzer
+		cookbook-light-sensor
 
 autostart: build
 	docker run --detach \
@@ -25,4 +25,4 @@ autostart: build
 		--net=host \
 		-e CBURL='wss://demo.crossbar.io/ws' \
 		-e CBREALM='crossbardemo' \
-		cookbook-button
+		cookbook-light-sensor
