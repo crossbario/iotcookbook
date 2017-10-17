@@ -2,6 +2,23 @@
 
 > may be out of date
 
+- 'sudo apt-get update'
+- 'sudo apt-get install fswebcam'
+- 'sudo apt-get install sharutils'
+
+- test camera 'fswebcam image.jpg'
+
+- check whether nodejs is installed and if so, which version 'node -v'
+
+- install node.js
+    - 'curl -sL https://deb.nodesource.com/setup_6.x | sudo bash -''
+    - 'sudo apt-get install nodejs -y'
+
+    - check version: 'node -v'
+
+- in this directory: 'npm install autobahn'
+
+
 The Raspberry Pi Camera component allows the remote triggering of a photo via a WAMP procedure call. The photo is returned as the call result.
 
 ![Raspberry Pi with camera](/static/img/iotcookbook/camera_raspberry_pi.jpg)

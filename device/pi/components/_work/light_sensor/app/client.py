@@ -1,6 +1,8 @@
 #!/usr/bin/python
 
 from threading import current_thread
+import threading
+
 from twisted.internet import reactor
 from twisted.internet.defer import inlineCallbacks
 from twisted.internet.error import ReactorNotRunning
@@ -11,7 +13,6 @@ from autobahn.twisted.wamp import ApplicationSession, ApplicationRunner
 from autobahn.wamp.exception import ApplicationError
 
 import RPi.GPIO as GPIO
-
 
 import os
 import argparse
@@ -39,13 +40,13 @@ def config_light_sensor_gpio(channel):
     configure the Light Sensor GPIO Pin
     """
 
-    GPIO.setmode(GPIO.BOARD)
+    GPIO.setmode(GPIO.BCM)
 
     # declare GPIO Pin as input and enable the pull-up resistor
     GPIO.setup(channel, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
 class LightSensorComponent(ApplicationSession):
-    """Our component wrapping a light sensor for threshold triggering."""
+    """Our component wrapping a light sensor which is threshold triggered."""
 
     @inlineCallbacks
     def onJoin(self, details):
@@ -71,7 +72,23 @@ class LightSensorComponent(ApplicationSession):
         config_light_sensor_gpio(self._light_sensor_pin)
 
         # setup edge detection for the light sensor
-        GPIO.add_event_detect(self._light_sensor_pin, GPIO.RISING, callback=self.light_change)
+        GPIO.add_event_detect(self._light_sensor_pin, GPIO.RISING, callback=self.light_change, bouncetime=1000)
+
+        # # for testing: print HIGH/LOW state (every 100ms)
+        # def printit():
+        #     threading.Timer(0.1, printit).start()
+        #     # print "Hello, World!"
+        #     if GPIO.input(self._light_sensor_pin):
+        #         print("input is HIGH")
+        #     else:
+        #         print("input is LOW")
+        #
+        # printit()
+
+
+
+
+
 
         # remember startup timestamp
         self._started = utcnow()
@@ -124,19 +141,22 @@ class LightSensorComponent(ApplicationSession):
         self.log.info('Light sensor edge event handler on thread {thread_id}', thread_id=current_thread().ident)
 
         # """ if the button is pressed during the progress is running this Error will be fired"""
-        # if self._is_pressed:
-        #     raise ApplicationError(u'{}.already-pressed'.format(self._prefix), 'Button is already pressed ')
-        #
-        # self._is_pressed = True
-        # self.log.info("Pressed")
-        #
-        # """ publish event button_pressed"""
-        # self.publish(u'{}.button_pressed'.format(self._prefix))
-        #
+        if self._is_dark:
+            return
+
+        self._is_dark = True
+        self.log.info("is dark")
+
+        # check whether the edge actually led to dark state
+        # FIXME
+
+        """ publish event is_dark"""
+        self.publish(u'{}.is_dark'.format(self._prefix))
+
         # """wait for a short time"""
-        # yield sleep(1000 / 1000.)
-        #
-        # self._is_pressed = False
+        yield sleep(1 / 1000.)
+
+        self._is_dark = False
         # """ publish event button_released"""
         # self.publish(u'{}.button_released'.format(self._prefix))
         #
