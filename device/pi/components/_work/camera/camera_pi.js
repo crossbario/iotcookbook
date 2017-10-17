@@ -55,7 +55,7 @@ function main () {
          return cameraResult.promise;
       };
 
-      session.register("io.crossbar.examples.pi.camera.take_photo", takePhoto).then(
+      session.register("io.crossbar.demo.iotstarterkit.663a384.camera.take_photo", takePhoto).then(
          function (registration) {
             console.log("Procedure 'io.crossbar.examples.pi.camera.take_photo' registered:", registration.id);
          },
