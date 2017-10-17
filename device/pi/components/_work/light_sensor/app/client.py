@@ -141,22 +141,28 @@ class LightSensorComponent(ApplicationSession):
         self.log.info('Light sensor edge event handler on thread {thread_id}', thread_id=current_thread().ident)
 
         # """ if the button is pressed during the progress is running this Error will be fired"""
-        if self._is_dark:
-            return
+        #if self._is_dark:
+        #    return
 
-        self._is_dark = True
-        self.log.info("is dark")
+	#self._is_dark = True
+        self._is_dark = GPIO.input(15)
+
+        #self.log.info("is dark")
 
         # check whether the edge actually led to dark state
         # FIXME
 
         """ publish event is_dark"""
-        self.publish(u'{}.is_dark'.format(self._prefix))
-
-        # """wait for a short time"""
-        yield sleep(1 / 1000.)
-
-        self._is_dark = False
+        if self._is_dark:
+            self.publish(u'{}.is_dark'.format(self._prefix))
+            self.log.info("is dark")
+            # """wait for a short time"""
+            yield sleep(1 / 1000.)
+        else:
+            self.publish(u'{}.is_light'.format(self._prefix))
+            self.log.info("is light")
+            yield sleep(1 / 1000.)
+        #self._is_dark = False
         # """ publish event button_released"""
         # self.publish(u'{}.button_released'.format(self._prefix))
         #
