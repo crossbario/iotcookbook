@@ -72,23 +72,7 @@ class LightSensorComponent(ApplicationSession):
         config_light_sensor_gpio(self._light_sensor_pin)
 
         # setup edge detection for the light sensor
-        GPIO.add_event_detect(self._light_sensor_pin, GPIO.RISING, callback=self.light_change, bouncetime=1000)
-
-        # # for testing: print HIGH/LOW state (every 100ms)
-        # def printit():
-        #     threading.Timer(0.1, printit).start()
-        #     # print "Hello, World!"
-        #     if GPIO.input(self._light_sensor_pin):
-        #         print("input is HIGH")
-        #     else:
-        #         print("input is LOW")
-        #
-        # printit()
-
-
-
-
-
+        GPIO.add_event_detect(self._light_sensor_pin, GPIO.RISING, callback=self.light_change, bouncetime=50)
 
         # remember startup timestamp
         self._started = utcnow()
@@ -100,7 +84,6 @@ class LightSensorComponent(ApplicationSession):
         for proc in [
             (self.started, u'started'),
             (self._is_dark, u'is_dark'),
-            # (self.press, u'press'),
         ]:
             uri = u'{}.{}'.format(self._prefix, proc[1])
             yield self.register(proc[0], uri)
@@ -140,19 +123,9 @@ class LightSensorComponent(ApplicationSession):
 
         self.log.info('Light sensor edge event handler on thread {thread_id}', thread_id=current_thread().ident)
 
-        # """ if the button is pressed during the progress is running this Error will be fired"""
-        #if self._is_dark:
-        #    return
+        self._is_dark = GPIO.input(self._light_sensor_pin)
 
-	#self._is_dark = True
-        self._is_dark = GPIO.input(15)
-
-        #self.log.info("is dark")
-
-        # check whether the edge actually led to dark state
-        # FIXME
-
-        """ publish event is_dark"""
+        """ publish current state"""
         if self._is_dark:
             self.publish(u'{}.is_dark'.format(self._prefix))
             self.log.info("is dark")
@@ -162,11 +135,6 @@ class LightSensorComponent(ApplicationSession):
             self.publish(u'{}.is_light'.format(self._prefix))
             self.log.info("is light")
             yield sleep(1 / 1000.)
-        #self._is_dark = False
-        # """ publish event button_released"""
-        # self.publish(u'{}.button_released'.format(self._prefix))
-        #
-        # self.log.info("released")
 
     def onLeave(self, details):
         self.log.info("session closed: {details}", details=details)
@@ -187,7 +155,6 @@ if __name__ == '__main__':
     # Crossbar.io connection configuration
 
     url = os.environ.get('CBURL', u'wss://demo.crossbar.io/ws')
-    # url = os.environ.get('CBURL', u'192.168.1.142')
     realm = os.environ.get('CBREALM', u'crossbardemo')
 
     # parse command line parameters

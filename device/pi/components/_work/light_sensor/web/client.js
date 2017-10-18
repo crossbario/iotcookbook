@@ -59,34 +59,69 @@ function connect() {
       status_realm.innerHTML = '' + details.authid + '@' + details.realm;
       status_url.innerHTML = '' + details.transport.url + ' (' + details.transport.protocol + ')';
 
-      // session.call(prefix + 'started').then(
-      //    function (started) {
-      //       status_serial.innerHTML = serial;
-      //       status_started.innerHTML = started;
-      //      },
-      //    function (err) {
-      //       if (err.error === 'wamp.error.no_such_procedure') {
-      //          window.location.replace(window.location.pathname);
-      //       } else {
-      //          console.log(err);
-      //       }
-      //    }
-      // );
-      //
+      session.call(prefix + 'started').then(
+         function (started) {
+            status_serial.innerHTML = serial;
+            status_started.innerHTML = started;
+           },
+         function (err) {
+            if (err.error === 'wamp.error.no_such_procedure') {
+               window.location.replace(window.location.pathname);
+            } else {
+               console.log(err);
+            }
+         }
+      );
+
+      var photo_requested = false;
+
       function is_dark (args, kwargs) {
          console.log('is_dark', args, kwargs);
 
-        threshold_indicator.classList.add("activated");
+         threshold_indicator.classList.add("triggered");
+
+         if(!photo_requested) {
+            photo_requested = true;
+            requestPhoto();
+         }
 
       }
 
       function is_light (args, kwargs) {
          console.log('is_light', args, kwargs);
-         threshold_indicator.classList.remove("activated");
+         threshold_indicator.classList.remove("triggered");
       }
 
       session.subscribe(prefix + 'is_dark', is_dark);
       session.subscribe(prefix + 'is_light', is_light);
+
+
+      var requestPhoto = function () {
+
+         session.call("io.crossbar.demo.iotstarterkit.663a384.camera.take_photo").then(
+            function (res) {
+               console.log("image received", res);
+
+               imageProgress.innerHTML = "";
+
+               base64image = res[1];
+               // need to remove the header and footer which uuencode adds
+               base64image = base64image.slice(29);
+               base64image = base64image.slice(0, -6);
+
+               image.src = "data:image/jpg;base64," + base64image;
+
+               photo_requested = false;
+
+            },
+            function (err) {
+               console.log("requestImage failed", err);
+               imageProgress.innerHTML = "Error getting image!";
+
+               photo_requested = false;
+            }
+         );
+      };
    };
 
 

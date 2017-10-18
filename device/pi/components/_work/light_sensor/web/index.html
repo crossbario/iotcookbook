@@ -11,21 +11,40 @@
     <!--Import materialize.css-->
     <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css"> -->
 
-    <link rel="stylesheet" href="materialize_cb.min.css.gz">
+    <link rel="stylesheet" href="materialize_cb.min.css">
 
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 
     <style>
-      #threshold_indicator {
-        height: 50px;
-        width: 50px;
-        background-color: #888;
-      }
+        .indicator_container {
+            width: 25em;
+            margin: 1em auto;
+            text-align: center;
+        }
 
-      #threshold_indicator.activated {
-        background-color: #ffff00;
-      }
+        #threshold_indicator {
+            display: inline-block;
+            height: 50px;
+            width: 50px;
+            background-color: #888;
+        }
+
+        #threshold_indicator.triggered {
+            background-color: #ffff00;
+        }
+
+        .imageContainer {
+            max-width: 640px;
+            min-height: 50vw;
+            width: 100%;
+            margin: 1em auto;
+            text-align: center;
+        }
+
+        .imageContainer img {
+            width: 100%;
+        }
     </style>
 
 </head>
@@ -62,6 +81,22 @@
             </div>
         </div>
 
+
+
+        <!-- indicator that the light sensor has been triggered (full darkness) -->
+        <div class="indicator_container">
+            Light sensor triggered: <br><br>
+            <span id="threshold_indicator" class=""></span>
+        </div>
+
+        <!-- for the Lange Nacht der Wissenschaften: image taken on trigger -->
+        <div class="imageContainer">
+            Surveillance camera image: <br>
+           <img id="image" src="criminal.svg">
+           <div id="imageProgress"></div>
+        </div>
+
+
         <h2>Status</h2>
         <table>
             <tr>
@@ -77,15 +112,6 @@
                 <td>Pi component started (UTC)</td><td><b id="status_started">-</b></td>
             </tr>
         </table>
-
-        <!-- indicator that the light sensor has been triggered (full darkness) -->
-        <div id="threshold_indicator">
-
-        </div>
-
-        <!-- indicator for the current light sensor value (?) -->
-
-        <!-- for the Lange Nacht der Wissenschaften: image taken on trigger -->
 
     </div>
 

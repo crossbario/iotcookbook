@@ -35,7 +35,7 @@ function main () {
          var exec = require('child_process').exec;
 
          // adjust to fit your webcam resolution
-         exec("sudo fswebcam -d /dev/video0 -r 640x480 --no-banner --save '-' | uuencode --base64 /dev/stdout", function(err, stdout, stderr) {
+         exec("fswebcam -d /dev/video0 -r 640x480 --no-banner --save '-' | uuencode --base64 /dev/stdout", function(err, stdout, stderr) {
 
             if (stdout != "") {
                cameraResult.resolve(["pi", stdout]);
