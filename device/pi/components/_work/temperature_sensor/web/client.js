@@ -20,7 +20,7 @@ if (!serial) {
 }
 
 // the URI prefix the buzzer component on the Pi is using
-var prefix = 'io.crossbar.demo.iotstarterkit.' + serial + '.temperature_sensor.';
+var prefix = 'io.crossbar.demo.iotstarterkit.' + serial + '.temperature_alarm.';
 
 // the WAMP session
 var session;
@@ -72,18 +72,21 @@ function connect() {
          }
       );
 
-      function on_threshold_crossed (args, kwargs) {
-         console.log('light sensor threshold crossed', kwargs);
+      function is_hot (args, kwargs) {
+         console.log('is_hot', args, kwargs);
 
-         if(kwargs.threshold_crossed) {
-            threshold_indicator.style.backgroundColor = '#ff0';
-         } else {
-            threshold_indicator.style.backgroundColor = '#333';
-         }
+         threshold_indicator.classList.add("triggered");
+
 
       }
 
-      session.subscribe(prefix + 'on_threshold_crossed', on_threshold_crossed);
+      function is_cold (args, kwargs) {
+         console.log('is_cold', args, kwargs);
+         threshold_indicator.classList.remove("triggered");
+      }
+
+      session.subscribe(prefix + 'is_hot', is_hot);
+      session.subscribe(prefix + 'is_cold', is_cold);
    };
 
 

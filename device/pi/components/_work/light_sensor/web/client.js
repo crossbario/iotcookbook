@@ -59,31 +59,33 @@ function connect() {
       status_realm.innerHTML = '' + details.authid + '@' + details.realm;
       status_url.innerHTML = '' + details.transport.url + ' (' + details.transport.protocol + ')';
 
-      session.call(prefix + 'started').then(
-         function (started) {
-            status_serial.innerHTML = serial;
-            status_started.innerHTML = started;
-           },
-         function (err) {
-            if (err.error === 'wamp.error.no_such_procedure') {
-               window.location.replace(window.location.pathname);
-            } else {
-               console.log(err);
-            }
-         }
-      );
+      // session.call(prefix + 'started').then(
+      //    function (started) {
+      //       status_serial.innerHTML = serial;
+      //       status_started.innerHTML = started;
+      //    },
+      //    function (err) {
+      //       if (err.error === 'wamp.error.no_such_procedure') {
+      //          window.location.replace(window.location.pathname);
+      //       } else {
+      //          console.log(err);
+      //       }
+      //    }
+      // );
 
       var photo_requested = false;
+
+      console.log("conn_1");
 
       function is_dark (args, kwargs) {
          console.log('is_dark', args, kwargs);
 
          threshold_indicator.classList.add("triggered");
 
-         if(!photo_requested) {
-            photo_requested = true;
-            requestPhoto();
-         }
+         // if(!photo_requested) {
+         //    photo_requested = true;
+         //    requestPhoto();
+         // }
 
       }
 
@@ -92,9 +94,12 @@ function connect() {
          threshold_indicator.classList.remove("triggered");
       }
 
+      console.log("conn_2");
+
       session.subscribe(prefix + 'is_dark', is_dark);
       session.subscribe(prefix + 'is_light', is_light);
 
+      console.log("conn_3");
 
       var requestPhoto = function () {
 
@@ -122,6 +127,8 @@ function connect() {
             }
          );
       };
+
+      console.log("conn_4");
    };
 
 
