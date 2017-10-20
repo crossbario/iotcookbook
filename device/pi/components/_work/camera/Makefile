@@ -17,7 +17,7 @@ start: build
 autostart: build
 	docker run --detach \
 		--restart=always \
-		--name button \
+		--name cookbook-camera \
 		--device /dev/ttyAMA0 \
 		--device /dev/mem \
 		--device /dev/gpiomem \
