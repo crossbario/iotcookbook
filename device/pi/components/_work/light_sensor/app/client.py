@@ -72,13 +72,34 @@ class LightSensorComponent(ApplicationSession):
         config_light_sensor_gpio(self._light_sensor_pin)
 
         # setup edge detection for the light sensor
-        GPIO.add_event_detect(self._light_sensor_pin, GPIO.RISING, callback=self.light_change, bouncetime=50)
+        # GPIO.add_event_detect(self._light_sensor_pin, GPIO.RISING, callback=self.light_change, bouncetime=50)
 
         # remember startup timestamp
         self._started = utcnow()
 
         # flag indicating if the button is already pressed
         self._is_dark = False
+
+        # simple polling for now
+        self._is_dark = False
+
+        def printit():
+            threading.Timer(0.1, printit).start()
+            # print "Hello, World!"
+            if GPIO.input(self._light_sensor_pin):
+                # print("input is HIGH")
+                if not self._is_dark:
+                    self._is_dark = True
+                    self.publish(u'{}.is_dark'.format(self._prefix))
+                    print(u'{}.is_dark'.format(self._prefix))
+            else:
+                # print("input is LOW")
+                if self._is_dark:
+                    self._is_dark = False
+                    self.publish(u'{}.is_light'.format(self._prefix))
+                    print(u'{}.is_light'.format(self._prefix))
+
+        printit()
 
         # register procedures
         for proc in [

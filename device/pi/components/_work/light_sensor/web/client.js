@@ -22,6 +22,7 @@ if (!serial) {
 
 // the URI prefix the buzzer component on the Pi is using
 var prefix = 'io.crossbar.demo.iotstarterkit.' + serial + '.light_sensor.';
+// var prefix = 'io.crossbar.demo.iotstarterkit.663a384.light_sensor.';
 
 // the WAMP session
 var session;
@@ -59,19 +60,19 @@ function connect() {
       status_realm.innerHTML = '' + details.authid + '@' + details.realm;
       status_url.innerHTML = '' + details.transport.url + ' (' + details.transport.protocol + ')';
 
-      // session.call(prefix + 'started').then(
-      //    function (started) {
-      //       status_serial.innerHTML = serial;
-      //       status_started.innerHTML = started;
-      //    },
-      //    function (err) {
-      //       if (err.error === 'wamp.error.no_such_procedure') {
-      //          window.location.replace(window.location.pathname);
-      //       } else {
-      //          console.log(err);
-      //       }
-      //    }
-      // );
+      session.call(prefix + 'started').then(
+         function (started) {
+            status_serial.innerHTML = serial;
+            status_started.innerHTML = started;
+           },
+         function (err) {
+            if (err.error === 'wamp.error.no_such_procedure') {
+               window.location.replace(window.location.pathname);
+            } else {
+               console.log(err);
+            }
+         }
+      );
 
       var photo_requested = false;
 
@@ -82,10 +83,10 @@ function connect() {
 
          threshold_indicator.classList.add("triggered");
 
-         // if(!photo_requested) {
-         //    photo_requested = true;
-         //    requestPhoto();
-         // }
+         if(!photo_requested) {
+            photo_requested = true;
+            requestPhoto();
+         }
 
       }
 
@@ -113,6 +114,16 @@ function connect() {
                // need to remove the header and footer which uuencode adds
                base64image = base64image.slice(29);
                base64image = base64image.slice(0, -6);
+
+               function b64DecodeUnicode(str) {
+                   return decodeURIComponent(Array.prototype.map.call(atob(str), function(c) {
+                       return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
+                   }).join(''))
+               }
+
+               console.log("pre process");
+               base64image = b64DecodeUnicode(base64image);
+               console.log("post process");
 
                image.src = "data:image/jpg;base64," + base64image;
 
@@ -146,12 +157,7 @@ function connect() {
 }
 
 function serialEntered() {
-
-  console.log("serialEntered");
-
    serial = document.getElementById("serialNumber").value;
-
-   console.log("serial", serial);
 
    // --> same serial used on page reload
    window.location.replace(window.location.pathname + '?serial=' + serial);
