@@ -13,7 +13,7 @@
     <!--Import materialize.css-->
     <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css"> -->
 
-    <link rel="stylesheet" href="_control_page_assets/materialize_cb.min.css.gz">
+    <link rel="stylesheet" href="_control_page_assets/materialize_cb.min.css">
 
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
     <link rel="stylesheet" href="_control_page_assets/styles.css">
@@ -67,8 +67,26 @@
 
 
         <h4>
+            Lange Nacht der Wissenschaften
+        </h4>
+
+        <ul class="controlPageLinks center">
+            <li>
+                <!-- <button> -->
+                    <a id="link_temperature" href="_work/temperature_sensor/web" target="_blank">Temperature Alarm</a>
+                <!-- </button> -->
+            </li>
+            <li>
+                <!-- <button> -->
+                    <a id="link_light" href="_work/light_sensor/web" target="_blank">Light Sensor</a>
+                <!-- </button> -->
+            </li>
+        </ul>
+
+
+        <h4>
             Open
-        </h4109>
+        </h4>
         <ul class="controlPageLinks center">
             <li>
                 <!-- <button> -->
@@ -124,6 +142,8 @@
             link_buzzer.href = prefix + "buzzer/web/index.html?serial=" + serial;
             link_colorstrip.href = prefix + "colorstrip/web/index.html?serial=" + serial;
             link_hexdisplay.href = prefix + "hexdisplay/web/index.html?serial=" + serial;
+            link_temperature.href = prefix + "_work/temperature_sensor/web/index.html?serial=" + serial;
+            link_light.href = prefix + "_work/light_sensor/web/index.html?serial=" + serial;
         }
 
         function serialEntered() {

@@ -106,7 +106,11 @@ function connect() {
 
          session.call("io.crossbar.demo.iotstarterkit.663a384.camera.take_photo").then(
             function (res) {
-               console.log("image received", res);
+            //    console.log("image received", res);
+               console.log("image received", res[1].length);
+               if(res[1].length < 100) {
+                   console.log(res[1]);
+               }
 
                imageProgress.innerHTML = "";
 
@@ -115,7 +119,10 @@ function connect() {
                base64image = base64image.slice(29);
                base64image = base64image.slice(0, -6);
 
+               console.log("setting image", base64image.length);
+
                image.src = "data:image/jpg;base64," + base64image;
+
 
                photo_requested = false;
 
