@@ -82,15 +82,15 @@ class LightSensorComponent(ApplicationSession):
             threading.Timer(0.1, printit).start()
             # print "Hello, World!"
             if GPIO.input(self._light_sensor_pin):
-                print("input is HIGH")
                 if not self._is_hot:
                     self._is_hot = True
                     self.publish(u'{}.is_hot'.format(self._prefix))
+                    print("input is HIGH")
             else:
-                print("input is LOW")
                 if self._is_hot:
                     self._is_hot = False
                     self.publish(u'{}.is_cold'.format(self._prefix))
+                    print("input is LOW")
 
         printit()
 

@@ -110,21 +110,10 @@ function connect() {
 
                imageProgress.innerHTML = "";
 
-               base64image = atob(res[1]);
+               base64image = res[1];
                // need to remove the header and footer which uuencode adds
-            //    base64image = base64image.slice(29);
-            //    base64image = base64image.slice(0, -6);
-
-
-            //    function b64DecodeUnicode(str) {
-            //        return decodeURIComponent(Array.prototype.map.call(atob(str), function(c) {
-            //            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
-            //        }).join(''))
-            //    }
-               //
-            //    console.log("pre process");
-            //    base64image = b64DecodeUnicode(base64image);
-            //    console.log("post process");
+               base64image = base64image.slice(29);
+               base64image = base64image.slice(0, -6);
 
                image.src = "data:image/jpg;base64," + base64image;
 
