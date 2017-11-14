@@ -33,7 +33,7 @@ class MyComponent(ApplicationSession):
 
             # Detect faces in the image
             faces = self.face_cascade.detectMultiScale(gray, scaleFactor=1.2, minNeighbors=5, minSize=(30, 30))
-            return [{'x': int(x), 'y': int(y), 'w': int(w), 'h': int(h)} for (x, y, w, h) in faces]
+            return [dict(zip(('x', 'y', 'w', 'h'), map(int, face))) for face in faces]
 
         res = yield threads.deferToThread(actually_get_face_coordinates, image_data)
         returnValue(res)
