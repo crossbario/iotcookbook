@@ -21,21 +21,21 @@ class MyComponent(ApplicationSession):
     def onJoin(self, details):
         print('Joined session={}'.format(details.realm))
         options = RegisterOptions(concurrency=MAX_CONCURRENT_TASKS, invoke='roundrobin')
-        yield self.register(self.face_detect_caller, "io.crossbar.demo.cvengine.detect_faces", options)
+        yield self.register(self.get_faces_coordinates, "io.crossbar.demo.cvengine.detect_faces", options)
 
     @inlineCallbacks
-    def face_detect_caller(self, image_data):
-        res = yield threads.deferToThread(self.get_faces_coordinates, image_data)
-        returnValue(res)
-
     def get_faces_coordinates(self, image_data):
-        image = numpy.fromstring(image_data, dtype=numpy.uint8)
-        image_np = cv2.imdecode(image, cv2.IMREAD_COLOR)
-        gray = cv2.cvtColor(image_np, cv2.COLOR_BGR2GRAY)
+        def actually_get_face_coordinates(data):
+            image = numpy.fromstring(data, dtype=numpy.uint8)
+            image_np = cv2.imdecode(image, cv2.IMREAD_COLOR)
+            gray = cv2.cvtColor(image_np, cv2.COLOR_BGR2GRAY)
 
-        # Detect faces in the image
-        faces = self.face_cascade.detectMultiScale(gray, scaleFactor=1.2, minNeighbors=5, minSize=(30, 30))
-        return [{'x': int(x), 'y': int(y), 'w': int(w), 'h': int(h)} for (x, y, w, h) in faces]
+            # Detect faces in the image
+            faces = self.face_cascade.detectMultiScale(gray, scaleFactor=1.2, minNeighbors=5, minSize=(30, 30))
+            return [{'x': int(x), 'y': int(y), 'w': int(w), 'h': int(h)} for (x, y, w, h) in faces]
+
+        res = yield threads.deferToThread(actually_get_face_coordinates, image_data)
+        returnValue(res)
 
 
 if __name__ == '__main__':
