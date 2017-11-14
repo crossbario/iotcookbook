@@ -20,6 +20,7 @@ class MyComponent(ApplicationSession):
     @inlineCallbacks
     def onJoin(self, details):
         print('Joined session={}'.format(details.realm))
+        reactor.suggestThreadPoolSize(MAX_CONCURRENT_TASKS)
         options = RegisterOptions(concurrency=MAX_CONCURRENT_TASKS, invoke='roundrobin')
         yield self.register(self.get_faces_coordinates, "io.crossbar.demo.cvengine.detect_faces", options)
 
@@ -42,5 +43,4 @@ if __name__ == '__main__':
     runner = ApplicationRunner(environ.get("AUTOBAHN_DEMO_ROUTER", u"ws://localhost:8080/ws"),
                                environ.get("AUTOBAHN_DEMO_REALM", u"realm1"))
     MAX_CONCURRENT_TASKS = int(environ.get('AUTOBAHN_DEMO_CPU_COUNT', multiprocessing.cpu_count()))
-    reactor.suggestThreadPoolSize(MAX_CONCURRENT_TASKS)
     runner.run(MyComponent, auto_reconnect=True)
