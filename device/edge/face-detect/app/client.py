@@ -2,6 +2,7 @@ import asyncio
 import argparse
 from os import environ, path
 import sys
+import tempfile
 
 from autobahn.asyncio.wamp import ApplicationSession, ApplicationRunner
 import cv2
@@ -18,7 +19,7 @@ class MyComponent(ApplicationSession):
         for f in faces:
             cv2.rectangle(image_np, (f['x'], f['y']), (f['x'] + f['w'], f['y'] + f['h']),
                           (0, 255, 0), 2)
-        cv2.imwrite('output.jpg', image_np)
+        cv2.imwrite(tempfile.mktemp('.jpg', 'fd_', dir='.'), image_np)
         self.leave()
 
     def onDisconnect(self):
