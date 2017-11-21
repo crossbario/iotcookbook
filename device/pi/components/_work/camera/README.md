@@ -99,3 +99,21 @@ The result is a base64 encoded image. As a default this is JPG, but can be chang
 In your own project:
 
 * Adapt the procedure URL for taking a photo to your own needs.
+
+
+## FIXME
+
+get Pi serial for component registration, try:
+
+```javascript
+const exec = require( 'child_process' ).exec;
+exec('cat /proc/cpuinfo | grep Serial',(error,stdout,stderr) => {
+    if(error){
+        console.error( `exec error: ${error}` );
+        return;
+    }
+    console.log( `stdout: ${stdout}` );// this is your RPI serial number
+    console.log( `stderr: ${stderr}` );
+});
+```
+from http://www.oodlestechnologies.com/blogs/How-to-get-Serial-Number-of-Raspberry-pi-3-using-NodeJS
