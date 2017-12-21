@@ -104,7 +104,9 @@ function connect() {
 
       var requestPhoto = function () {
 
-         session.call("io.crossbar.demo.iotstarterkit.663a384.camera.take_photo").then(
+        // requires light sensor component and camera component to
+        // on the same pi!
+         session.call("io.crossbar.demo.iotstarterkit." + serial + ".camera.take_photo").then(
             function (res) {
             //    console.log("image received", res);
                console.log("image received", res[1].length);

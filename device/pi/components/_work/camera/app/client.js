@@ -1,4 +1,5 @@
 var autobahn = require('autobahn');
+var fs = require('fs');
 
 var when = autobahn.when;
 var session = null;
@@ -6,6 +7,21 @@ var session = null;
 function main () {
 
    console.log("Raspberry Pi Camera starting");
+
+   // get the serial of the Pi this is running on
+   var lines = fs.readFileSync('/proc/cpuinfo').toString().split('\n');
+   var serial = null;
+   for(line in lines) {
+      var parts=lines[line].replace(/\t/g, '').split(':');
+
+      if (parts.length == 2) {
+         var key=parts[0];
+         var value=parts[1].trim();
+         if (key === 'Serial') {
+            serial = value.slice(-8);
+         }
+      }
+   }
 
    // the WAMP connection to the Router
    //
@@ -55,9 +71,9 @@ function main () {
          return cameraResult.promise;
       };
 
-      session.register("io.crossbar.demo.iotstarterkit.663a384.camera.take_photo", takePhoto).then(
+      session.register("io.crossbar.demo.iotstarterkit." + serial + ".camera.take_photo", takePhoto).then(
          function (registration) {
-            console.log("Procedure 'io.crossbar.examples.pi.camera.take_photo' registered:", registration.id);
+            console.log("Procedure 'io.crossbar.demo.iotstarterkit." + serial + ".camera.take_photo' registered:", registration.id);
          },
          function (error) {
             console.log("Registration failed:", error);
