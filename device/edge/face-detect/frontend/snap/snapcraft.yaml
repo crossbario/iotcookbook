@@ -12,10 +12,7 @@ parts:
     plugin: python
     source: .
     requirements: requirements.txt
-  source:
-    plugin: dump
-    source: .
 
 apps:
   wamp-face-detect-frontend:
-    command: python3 -u frontend.py
+    command: python3 -u main.py
