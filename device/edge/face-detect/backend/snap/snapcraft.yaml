@@ -20,6 +20,7 @@ parts:
     source: .
     stage:
       - main.py
+      - cascades/*
 
 
 apps:
