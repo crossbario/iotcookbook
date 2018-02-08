@@ -1,0 +1,21 @@
+name: wamp-face-detect-backend
+version: '0.1'
+summary: WAMP component to detect faces
+description: |
+  TBD
+
+grade: devel
+confinement: strict
+
+parts:
+  backend:
+    plugin: python
+    source: .
+    requirements: requirements.txt
+    stage-packages:
+      - libsm6
+      - libxrender1
+
+apps:
+  wamp-face-detect-backend:
+    command: python3 -u main.py
