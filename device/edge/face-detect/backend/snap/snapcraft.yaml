@@ -15,7 +15,13 @@ parts:
     stage-packages:
       - libsm6
       - libxrender1
+  dump:
+    plugin: dump
+    source: .
+    stage:
+      - main.py
+
 
 apps:
   wamp-face-detect-backend:
-    command: python3 -u main.py
+    command: python3 -u $SNAP/main.py

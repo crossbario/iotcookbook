@@ -12,7 +12,12 @@ parts:
     plugin: python
     source: .
     requirements: requirements.txt
+  dump:
+    plugin: dump
+    source: .
+    stage:
+      - main.py
 
 apps:
   wamp-face-detect-frontend:
-    command: python3 -u main.py
+    command: python3 -u $SNAP/main.py
