@@ -53,7 +53,7 @@ run_logger:
 	PYTHONPATH="." ${RUN_LOGGER} --profile=profiles/log1.ini &
 	PYTHONPATH="." ${RUN_LOGGER} --profile=profiles/log2.ini &
 
-run_microservices:
+run_application:
 	PYTHONPATH="." ${RUN_MS} --profile=profiles/profile1.ini && sleep 1 &
 	PYTHONPATH="." ${RUN_MS} --profile=profiles/profile2.ini && sleep 1 &
 	PYTHONPATH="." ${RUN_MS} --profile=profiles/profile3.ini && sleep 1 &

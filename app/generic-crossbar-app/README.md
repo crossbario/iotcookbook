@@ -42,7 +42,7 @@ Then the loggers, authenticators, and finally the dummy microservices
 ```bash
 make run_logger
 make run_auth
-make run_microservices
+make run_application
 ```
 
 Note that this will make a while bunch of processes in the background that will compete for **stdout** so typing may become *interesting*, alternatively you can start the individual process by hand in separate terminal windows.
