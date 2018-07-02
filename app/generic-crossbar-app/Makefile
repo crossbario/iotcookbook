@@ -5,7 +5,10 @@ RUN_AUTH=components/security.py
 RUN_LOGGER=components/logger.py
 
 .PHONY: dirs dhparam client_certs server_certs
-.PHONY: clean_server clean_client run_microservices kill_microservices
+.PHONY: clean_server clean_client 
+.PHONY: run_auth run_logger run_application
+.PHONY: kill_auth kill_logger kill_application
+
 
 all:
 	@echo 'No default action'
