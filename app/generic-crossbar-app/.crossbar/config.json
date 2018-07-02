@@ -1,0 +1,296 @@
+{
+    "controller": {},
+    "version": 2,
+    "workers": [
+        {
+            "type": "router",
+            "components": [
+                {
+                    "classname": "security.Crossbar",
+                    "realm": "logger",
+                    "role": "authenticator",
+                    "type": "class"
+                }
+            ],
+            "realms": [
+                {
+                    "name": "logger",
+                    "roles": [
+                        {
+                            "name": "node",
+                            "permissions": [
+                                {
+                                    "allow": {
+                                        "call": true
+                                    },
+                                    "match": "prefix",
+                                    "uri": ""
+                                }
+                            ]
+                        },
+                        {
+                            "name": "logdaemon",
+                            "permissions": [
+                                {
+                                    "allow": {
+                                        "register": true,
+                                        "subscribe": true
+                                    },
+                                    "match": "prefix",
+                                    "uri": ""
+                                }
+                            ]
+                        },
+                        {
+                            "name": "client",
+                            "permissions": [
+                                {
+                                    "allow": {
+                                        "subscribe": true
+                                    },
+                                    "match": "prefix",
+                                    "uri": ""
+                                }
+                            ]
+                        },
+                        {
+                            "name": "authenticator",
+                            "permissions": [
+                                {
+                                    "allow": {
+                                        "call": true,
+                                        "publish": true,
+                                        "register": true,
+                                        "subscribe": true
+                                    },
+                                    "cache": true,
+                                    "disclose": {
+                                        "caller": true,
+                                        "publisher": true
+                                    },
+                                    "match": "prefix",
+                                    "uri": ""
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "transports": [
+                {
+                    "type": "web",
+                    "endpoint": {
+                        "port": 8442,
+                        "tls": {
+                            "ca_certificates": [
+                                "../certs/server_crt.pem"
+                            ],
+                            "certificate": "../certs/server_crt.pem",
+                            "ciphers": "ECDHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA256:",
+                            "dhparam": "../certs/dhparam.pem",
+                            "key": "../certs/server_key.pem"
+                        },
+                        "type": "tcp"
+                    },
+                    "options": {
+                        "access_log": false
+                    },
+                    "paths": {
+                        "ws": {
+                            "auth": {
+                                "tls": {
+                                    "authenticator": "xbr.security.authenticate_server",
+                                    "type": "dynamic"
+                                }
+                            },
+                            "debug": true,
+                            "options": {
+                                "auto_ping_interval": 10000,
+                                "auto_ping_size": 32,
+                                "auto_ping_timeout": 60000,
+                                "close_handshake_timeout": 5000,
+                                "enable_webstatus": false,
+                                "fail_by_drop": true,
+                                "max_message_size": 9999999,
+                                "open_handshake_timeout": 5000
+                            },
+                            "type": "websocket"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "components": [
+                {
+                    "classname": "security.Crossbar",
+                    "realm": "crossbar",
+                    "role": "authenticator",
+                    "type": "class"
+                }
+            ],
+            "realms": [
+                {
+                    "name": "crossbar",
+                    "roles": [
+                        {
+                            "authorizer": "xbr.security.authorize_client",
+                            "name": "client"
+                        },
+                        {
+                            "authorizer": "app.security.server.authorize",
+                            "name": "server"
+                        },
+                        {
+                            "name": "authenticator",
+                            "permissions": [
+                                {
+                                    "allow": {
+                                        "call": true,
+                                        "publish": true,
+                                        "register": true,
+                                        "subscribe": true
+                                    },
+                                    "cache": true,
+                                    "disclose": {
+                                        "caller": true,
+                                        "publisher": true
+                                    },
+                                    "match": "prefix",
+                                    "uri": ""
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "transports": [
+                {
+                    "type": "web",
+                    "endpoint": {
+                        "port": 8440,
+                        "tls": {
+                            "ca_certificates": [
+                                "../certs/server_crt.pem"
+                            ],
+                            "certificate": "../certs/server_crt.pem",
+                            "ciphers": "ECDHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA256:",
+                            "dhparam": "../certs/dhparam.pem",
+                            "key": "../certs/server_key.pem"
+                        },
+                        "type": "tcp"
+                    },
+                    "options": {
+                        "access_log": false
+                    },
+                    "paths": {
+                        "ws": {
+                            "auth": {
+                                "tls": {
+                                    "authenticator": "xbr.security.authenticate_server",
+                                    "type": "dynamic"
+                                }
+                            },
+                            "debug": true,
+                            "options": {
+                                "auto_ping_interval": 10000,
+                                "auto_ping_size": 32,
+                                "auto_ping_timeout": 60000,
+                                "close_handshake_timeout": 5000,
+                                "enable_webstatus": false,
+                                "fail_by_drop": true,
+                                "max_message_size": 9999999,
+                                "open_handshake_timeout": 5000
+                            },
+                            "type": "websocket"
+                        }
+                    }
+                },
+                {
+                    "type": "web",
+                    "endpoint": {
+                        "port": 8441,
+                        "tls": {
+                            "ca_certificates": [
+                                "../certs/server_crt.pem"
+                            ],
+                            "certificate": "../certs/server_crt.pem",
+                            "dhparam": "../certs/dhparam.pem",
+                            "ciphers": "ECDHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA256:",
+                            "key": "../certs/server_key.pem"
+                        },
+                        "type": "tcp"
+                    },
+                    "options": {
+                        "access_log": false
+                    },
+                    "paths": {
+                        "ws": {
+                            "type": "websocket",
+                            "auth": {
+                                "tls": {
+                                    "authenticator": "app.security.server.authenticate",
+                                    "type": "dynamic"
+                                }
+                            },
+                            "debug": true,
+                            "options": {
+                                "auto_ping_interval": 10000,
+                                "auto_ping_size": 32,
+                                "auto_ping_timeout": 60000,
+                                "close_handshake_timeout": 5000,
+                                "enable_webstatus": false,
+                                "fail_by_drop": true,
+                                "max_message_size": 9999999,
+                                "open_handshake_timeout": 5000
+                            }
+                        }
+                    }
+                },
+                {
+                    "type": "web",
+                    "endpoint": {
+                        "port": 8443,
+                        "tls": {
+                            "certificate": "../certs/server_crt.pem",
+                            "ciphers": "ECDHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA256:",
+                            "dhparam": "../certs/dhparam.pem",
+                            "key": "../certs/server_key.pem"
+                        },
+                        "type": "tcp"
+                    },
+                    "options": {
+                        "access_log": false
+                    },
+                    "paths": {
+                        "ws": {
+                            "auth": {
+                                "anonymous": {
+                                    "role": "anonymous",
+                                    "type": "static"
+                                },
+                                "ticket": {
+                                    "authenticator": "xbr.security.authenticate_client",
+                                    "type": "dynamic"
+                                }
+                            },
+                            "debug": true,
+                            "options": {
+                                "auto_ping_interval": 10000,
+                                "auto_ping_size": 32,
+                                "auto_ping_timeout": 60000,
+                                "close_handshake_timeout": 5000,
+                                "enable_webstatus": false,
+                                "fail_by_drop": true,
+                                "max_message_size": 9999999,
+                                "open_handshake_timeout": 5000
+                            },
+                            "type": "websocket"
+                        }
+                    }
+                }
+            ],
+            "type": "router"
+        }
+    ]
+}
