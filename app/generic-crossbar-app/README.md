@@ -22,6 +22,7 @@ After checking out the repository and assuming you have a standard set of Python
 ```bash
 mkvirtualenv -p /usr/bin/python3 ms-demo
 pip install pipenv
+pipenv lock
 pipenv install
 ```
 
