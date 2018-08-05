@@ -1,4 +1,4 @@
 .PHONY: start
 
 start:
-	python3 -u app/server.py
+	python3 -u backend/main.py

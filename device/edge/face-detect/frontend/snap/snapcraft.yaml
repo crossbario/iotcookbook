@@ -1,0 +1,23 @@
+name: wamp-face-detect-frontend
+version: '0.1'
+summary: WAMP face-detect client component
+description: |
+  TBD
+
+grade: devel
+confinement: strict
+
+parts:
+  frontend:
+    plugin: python
+    source: .
+    requirements: requirements.txt
+  dump:
+    plugin: dump
+    source: .
+    stage:
+      - main.py
+
+apps:
+  wamp-face-detect-frontend:
+    command: python3 -u $SNAP/main.py
