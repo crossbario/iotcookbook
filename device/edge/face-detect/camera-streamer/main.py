@@ -50,12 +50,12 @@ class ClientSession(wamp.ApplicationSession):
     def capture_and_send_frames(self):
         def on_frame():
             ret, frame = reader.read()
-            retval, buffer = cv2.imencode('.jpg', frame, (cv2.IMWRITE_JPEG_QUALITY, 50))
+            retval, buffer = cv2.imencode('.jpg', frame, (cv2.IMWRITE_JPEG_QUALITY, 80))
             data = buffer.tobytes()
             base64_encoded = base64.b64encode(data).decode()
             self.publish("io.crossbar.demo.frames", base64_encoded, str(uuid.uuid4()))
 
-        reader = AsyncFrameReader(0, 960, 540)
+        reader = AsyncFrameReader()
         reader.add_on_frame_listener(on_frame)
         reader.start()
 
