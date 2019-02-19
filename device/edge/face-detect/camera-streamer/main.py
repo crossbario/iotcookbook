@@ -1,4 +1,3 @@
-import base64
 import threading
 import uuid
 
@@ -10,7 +9,7 @@ from twisted.internet import reactor, threads
 
 # Inspired by http://blog.blitzblit.com/2017/12/24/asynchronous-video-capture-in-python-with-opencv/
 class AsyncFrameReader:
-    def __init__(self, src=0, width=1280, height=720):
+    def __init__(self, src=0, width=500, height=400):
         self.cap = cv2.VideoCapture(src)
         self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, width)
         self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
@@ -49,11 +48,10 @@ class AsyncFrameReader:
 class ClientSession(wamp.ApplicationSession):
     def capture_and_send_frames(self):
         def on_frame():
-            ret, frame = reader.read()
-            retval, buffer = cv2.imencode('.jpg', frame, (cv2.IMWRITE_JPEG_QUALITY, 80))
-            data = buffer.tobytes()
-            base64_encoded = base64.b64encode(data).decode()
-            self.publish("io.crossbar.demo.frames", base64_encoded, str(uuid.uuid4()))
+            _, frame = reader.read()
+            frame = cv2.flip(frame, 1)
+            _, buffer = cv2.imencode('.jpg', frame, (cv2.IMWRITE_JPEG_QUALITY, 40))
+            self.publish("io.crossbar.demo.frames", buffer.tobytes(), str(uuid.uuid4()))
 
         reader = AsyncFrameReader()
         reader.add_on_frame_listener(on_frame)
