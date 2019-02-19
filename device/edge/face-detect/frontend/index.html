@@ -7,7 +7,6 @@
         var connection = new autobahn.Connection({url: 'ws://127.0.0.1:8080/ws', realm: 'realm1'});
 
         connection.onopen = function (session) {
-
            function onframe(args) {
               document.getElementById("ViewFinder").src = "data:image/jpg;base64," + args[0];
            }
