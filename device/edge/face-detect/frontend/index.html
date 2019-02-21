@@ -1,20 +1,8 @@
 <!DOCTYPE html>
 <html>
 <body>
-    <img id="ViewFinder" alt="Live camera">
+    <canvas id="myCanvas" width="500" height="400" ></canvas>
     <script src="../../../../web/js/autobahn.min.js"></script>
-    <script type="text/javascript">
-        var connection = new autobahn.Connection({url: 'ws://127.0.0.1:8080/ws', realm: 'realm1'});
-
-        connection.onopen = function (session) {
-           function onframe(args) {
-              document.getElementById("ViewFinder").src = "data:image/jpg;base64," + args[0];
-           }
-           session.subscribe('io.crossbar.demo.frames', onframe);
-        };
-
-        connection.open();
-    </script>
-
+    <script src="main.js"></script>
 </body>
 </html>
