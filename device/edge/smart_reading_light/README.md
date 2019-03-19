@@ -59,3 +59,17 @@ Natural control model.
 # Future features
 
 * Light remembers the last read page in book  
+
+--- 
+
+to do:
+
+- get the book shape recogintion working, e.g. based on https://pythontips.com/2015/03/11/a-guide-to-finding-books-in-images-using-python-and-opencv/
+- find a way to differentiate the Pi (starter kit) from the book, should both be recognized
+- differentiate open book and closed book based on ratios of sides
+
+# Reading materials
+
+- https://pythontips.com/2015/03/11/a-guide-to-finding-books-in-images-using-python-and-opencv/
+- https://docs.opencv.org/3.4/dc/d88/tutorial_traincascade.html
+
